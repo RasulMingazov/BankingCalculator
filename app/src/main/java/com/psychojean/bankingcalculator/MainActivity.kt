@@ -2,7 +2,9 @@ package com.psychojean.bankingcalculator
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -10,11 +12,32 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import com.arkivanov.decompose.defaultComponentContext
 import com.psychojean.bankingcalculator.ui.theme.BankingCalculatorTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val component: DefaultAppComponent by lazy {
+        (application as App).mainDaggerComponent.rootComponentFactory(defaultComponentContext())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                ContextCompat.getColor(this, R.color.transparent),
+                ContextCompat.getColor(this, R.color.transparent)
+            ),
+            navigationBarStyle = SystemBarStyle.light(
+                ContextCompat.getColor(this, R.color.transparent),
+                ContextCompat.getColor(this, R.color.transparent)
+            ),
+        )
         super.onCreate(savedInstanceState)
+        (application as App).mainDaggerComponent.inject(this)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             BankingCalculatorTheme {
                 // A surface container using the 'background' color from the theme

@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "BankingCalculator"
 include(":app")
- 
+include(":root:api")
+include(":root:impl")

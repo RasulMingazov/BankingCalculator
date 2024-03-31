@@ -23,3 +23,8 @@ rootProject.name = "BankingCalculator"
 include(":app")
 include(":root:api")
 include(":root:impl")
+include(":feature")
+include(":feature:deposit")
+include(":feature:deposit:api")
+include(":feature:deposit:impl")
+include(":feature:deposit:ui")

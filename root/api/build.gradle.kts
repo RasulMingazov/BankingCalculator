@@ -9,7 +9,7 @@ java {
 }
 
 dependencies {
+    implementation(project(":feature:deposit:api"))
 
     implementation(libs.decompose)
-
 }

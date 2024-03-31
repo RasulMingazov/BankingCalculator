@@ -5,22 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.defaultComponentContext
 import com.psychojean.bankingcalculator.ui.theme.BankingCalculatorTheme
+import com.psychojean.root.impl.DefaultRootComponent
+import com.psychojean.root.impl.RootContent
 
 class MainActivity : ComponentActivity() {
 
-    private val component: DefaultAppComponent by lazy {
-        (application as App).mainDaggerComponent.rootComponentFactory(defaultComponentContext())
+    private val component: DefaultRootComponent by lazy {
+        (application as BankingApp).mainDaggerComponent.rootComponentFactory(defaultComponentContext())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,35 +35,19 @@ class MainActivity : ComponentActivity() {
             ),
         )
         super.onCreate(savedInstanceState)
-        (application as App).mainDaggerComponent.inject(this)
+        (application as BankingApp).mainDaggerComponent.inject(this)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             BankingCalculatorTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                Box(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background)
+                        .imePadding()
                 ) {
-                    Greeting("Android")
+                    RootContent(component = component)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BankingCalculatorTheme {
-        Greeting("Android")
     }
 }

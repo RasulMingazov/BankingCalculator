@@ -1,9 +1,10 @@
 package com.psychojean.bankingcalculator
 
 import android.app.Application
+import com.psychojean.bankingcalculator.di.DaggerMainDaggerComponent
 import com.psychojean.bankingcalculator.di.MainDaggerComponent
 
-class App : Application() {
+class BankingApp : Application() {
 
     internal lateinit var mainDaggerComponent: MainDaggerComponent
 

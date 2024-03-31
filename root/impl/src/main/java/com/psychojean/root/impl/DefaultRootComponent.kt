@@ -5,7 +5,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
-import com.psychojean.feature.deposit.api.CalculateDepositComponent
+import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 import com.psychojean.root.api.RootComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

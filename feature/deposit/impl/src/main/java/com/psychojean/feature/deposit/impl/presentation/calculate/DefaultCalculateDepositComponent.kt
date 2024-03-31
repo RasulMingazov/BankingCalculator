@@ -1,7 +1,7 @@
 package com.psychojean.feature.deposit.impl.presentation.calculate
 
 import com.arkivanov.decompose.ComponentContext
-import com.psychojean.feature.deposit.api.CalculateDepositComponent
+import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

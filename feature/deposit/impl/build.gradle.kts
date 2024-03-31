@@ -36,7 +36,8 @@ android {
 
 dependencies {
 
-    api(project(":feature:deposit:api"))
+    implementation(project(":feature:deposit:api"))
+    implementation(project("::core:api"))
 
     implementation(libs.androidx.core.ktx)
 
@@ -45,4 +46,8 @@ dependencies {
 
     kapt(libs.dagger.compiler)
     implementation(libs.dagger)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

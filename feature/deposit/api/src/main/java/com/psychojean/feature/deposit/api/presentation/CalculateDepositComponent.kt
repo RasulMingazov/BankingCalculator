@@ -1,4 +1,4 @@
-package com.psychojean.feature.deposit.api
+package com.psychojean.feature.deposit.api.presentation
 
 import com.arkivanov.decompose.ComponentContext
 

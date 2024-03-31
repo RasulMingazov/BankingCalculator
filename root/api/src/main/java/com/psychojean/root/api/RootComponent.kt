@@ -3,7 +3,7 @@ package com.psychojean.root.api
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
-import com.psychojean.feature.deposit.api.CalculateDepositComponent
+import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 
 interface RootComponent {
 

@@ -46,7 +46,6 @@ class DefaultRootComponent @AssistedInject constructor(
 
         @Serializable
         data object Deposit : Config()
-
     }
 
     @AssistedFactory

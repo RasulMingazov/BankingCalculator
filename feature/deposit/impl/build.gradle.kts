@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.dagger)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlin.coroutines.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

@@ -1,4 +1,4 @@
-package com.psychojean.core.api
+package com.psychojean.core
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +12,7 @@ interface DispatchersList {
 }
 
 class DefaultDispatchersList : DispatchersList {
+
     override fun io(): CoroutineDispatcher = Dispatchers.IO
     override fun default(): CoroutineDispatcher = Dispatchers.Default
     override fun ui(): CoroutineDispatcher = Dispatchers.Main

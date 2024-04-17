@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.psychojean.feature.deposit.ui"
+    namespace = "com.psychojean.core.ui"
     compileSdk = 34
 
     defaultConfig {
@@ -40,18 +40,11 @@ android {
 
 dependencies {
 
-    api(project(":feature:deposit:api"))
-    implementation(project(":core:ui"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
 }

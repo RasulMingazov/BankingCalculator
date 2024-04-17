@@ -1,6 +1,6 @@
 package com.psychojean.feature.deposit.impl.domain.validation.month
 
-import com.psychojean.core.api.RootResult
+import com.psychojean.core.RootResult
 import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationError
 import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationUseCase
 import java.math.BigInteger

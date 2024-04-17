@@ -1,4 +1,4 @@
-package com.psychojean.core.api
+package com.psychojean.core
 
 sealed class RootResult<D, out E : Error> private constructor() {
 

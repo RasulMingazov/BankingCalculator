@@ -1,6 +1,6 @@
 package com.psychojean.feature.deposit.impl.domain.validation.interest
 
-import com.psychojean.core.api.RootResult
+import com.psychojean.core.RootResult
 import com.psychojean.feature.deposit.api.domain.validation.interest.InterestValidationError
 import com.psychojean.feature.deposit.api.domain.validation.interest.InterestValidationUseCase
 import java.math.BigDecimal

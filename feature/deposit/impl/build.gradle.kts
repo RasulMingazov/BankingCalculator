@@ -37,7 +37,7 @@ android {
 dependencies {
 
     implementation(project(":feature:deposit:api"))
-    implementation(project("::core:api"))
+    implementation(project("::core"))
 
     implementation(libs.androidx.core.ktx)
 

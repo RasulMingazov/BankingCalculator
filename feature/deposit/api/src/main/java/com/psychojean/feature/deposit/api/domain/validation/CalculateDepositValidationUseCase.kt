@@ -1,7 +1,7 @@
 package com.psychojean.feature.deposit.api.domain.validation
 
-import com.psychojean.core.api.Error
-import com.psychojean.core.api.RootResult
+import com.psychojean.core.Error
+import com.psychojean.core.RootResult
 import com.psychojean.feature.deposit.api.domain.validation.amount.AmountValidationError
 import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationError
 

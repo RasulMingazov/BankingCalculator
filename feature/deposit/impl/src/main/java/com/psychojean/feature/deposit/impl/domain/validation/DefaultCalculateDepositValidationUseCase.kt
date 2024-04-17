@@ -1,7 +1,7 @@
 package com.psychojean.feature.deposit.impl.domain.validation
 
-import com.psychojean.core.api.DispatchersList
-import com.psychojean.core.api.RootResult
+import com.psychojean.core.DispatchersList
+import com.psychojean.core.RootResult
 import com.psychojean.feature.deposit.api.domain.validation.CalculateDepositError
 import com.psychojean.feature.deposit.api.domain.validation.CalculateDepositValidationUseCase
 import com.psychojean.feature.deposit.api.domain.validation.Deposit

@@ -1,7 +1,7 @@
 package com.psychojean.feature.deposit.api.domain.validation.interest
 
-import com.psychojean.core.api.Error
-import com.psychojean.core.api.RootResult
+import com.psychojean.core.Error
+import com.psychojean.core.RootResult
 
 interface InterestValidationUseCase {
 

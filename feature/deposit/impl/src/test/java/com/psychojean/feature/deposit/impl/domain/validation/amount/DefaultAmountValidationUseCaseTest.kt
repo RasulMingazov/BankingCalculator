@@ -1,6 +1,6 @@
 package com.psychojean.feature.deposit.impl.domain.validation.amount
 
-import com.psychojean.core.api.RootResult
+import com.psychojean.core.RootResult
 import com.psychojean.feature.deposit.api.domain.validation.amount.AmountValidationError
 import junit.framework.TestCase
 import kotlinx.coroutines.test.runTest

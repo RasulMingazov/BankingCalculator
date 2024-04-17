@@ -1,7 +1,7 @@
 package com.psychojean.feature.deposit.api.domain.validation.month
 
-import com.psychojean.core.api.Error
-import com.psychojean.core.api.RootResult
+import com.psychojean.core.Error
+import com.psychojean.core.RootResult
 
 interface MonthPeriodValidationUseCase {
 

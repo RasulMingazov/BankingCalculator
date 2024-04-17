@@ -9,7 +9,8 @@ java {
 }
 
 dependencies {
-    implementation(project(":core:api"))
+    implementation(project(":core"))
 
     implementation(libs.decompose)
+    implementation(libs.kotlin.coroutines)
 }

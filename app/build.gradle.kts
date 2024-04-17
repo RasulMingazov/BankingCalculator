@@ -52,7 +52,7 @@ android {
 
 dependencies {
 
-    implementation(project(":core:api"))
+    implementation(project(":core"))
 
     implementation(project(":root:api"))
     implementation(project(":root:impl"))

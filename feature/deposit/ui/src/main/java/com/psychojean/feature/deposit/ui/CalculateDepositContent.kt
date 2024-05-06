@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.psychojean.core.ui.PlaceholderTransformation
+import com.psychojean.core.ui.ThousandTransformation
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositIntent
 
@@ -132,7 +133,7 @@ fun InitialDepositTextField(
         onValueChange = onValueChange,
         modifier = modifier,
         isError = error != null,
-        visualTransformation = PlaceholderTransformation(stringResource(id = R.string.enter_initial_deposit)),
+        visualTransformation = if (value.isEmpty()) PlaceholderTransformation(stringResource(id = R.string.enter_initial_deposit)) else ThousandTransformation,
         supportingText = {
             if (error != null)
                 Text(

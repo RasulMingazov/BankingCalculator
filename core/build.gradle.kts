@@ -11,4 +11,5 @@ java {
 dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.decompose)
+    implementation(libs.javax.inject)
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="interest_rate_is_incorrect">Interest rate is incorrect</string>
+    <string name="interest_rate_must_be_between_0_and_100">Interest rate must be between 0.0 and 100.0</string>
+    <string name="interest_rate_cannot_be_empty">Interest rate can not be empty</string>
+
+    <string name="initial_deposit_is_incorrect">Initial deposit is incorrect</string>
+    <string name="initial_deposit_cannot_be_less_than_1">Initial deposit can not be less than 1</string>
+    <string name="initial_deposit_cannot_be_empty">Initial deposit can not be empty</string>
+
+    <string name="month_period_is_incorrect">Month period is incorrect</string>
+    <string name="month_period_cannot_be_empty">Month period can not be empty</string>
+    <string name="month_period_cannot_be_less_than_1">Month period can not be less than 1</string>
+    <string name="month_period_cannot_be_more_than_60">Month period can not be more than 60</string>
+</resources>

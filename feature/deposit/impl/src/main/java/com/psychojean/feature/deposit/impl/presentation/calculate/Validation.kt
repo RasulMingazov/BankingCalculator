@@ -30,6 +30,6 @@ internal val MonthPeriodValidationError?.text: Int?
         MonthPeriodValidationError.INCORRECT, MonthPeriodValidationError.CONTAINS_DOT_OR_COMMA -> R.string.month_period_is_incorrect
         MonthPeriodValidationError.EMPTY -> R.string.month_period_cannot_be_empty
         MonthPeriodValidationError.LESS_THAN_1 -> R.string.month_period_cannot_be_less_than_1
-        MonthPeriodValidationError.MORE_THAN_60 -> R.string.month_period_cannot_be_more_than_60
+        MonthPeriodValidationError.MORE_THAN_120 -> R.string.month_period_cannot_be_more_than_120
         else -> null
     }

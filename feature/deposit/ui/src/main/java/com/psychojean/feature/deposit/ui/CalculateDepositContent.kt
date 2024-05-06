@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +27,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -52,15 +50,6 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
             TopBar(
                 scrollBehavior = scrollBehavior,
                 title = stringResource(id = R.string.deposit_calculator)
-            )
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            CalculateButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                onClick = { component.accept(CalculateDepositIntent.Calculate) }
             )
         }
     ) { padding ->
@@ -96,12 +85,8 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
                 onValueChange = { component.accept(CalculateDepositIntent.MonthPeriodChanged(it)) }
             )
             Spacer(modifier = Modifier.height(8.dp))
-            CalculateButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .alpha(0f)
-            )
+
+            Text(text = "Income: " + state.value.income)
         }
     }
 }

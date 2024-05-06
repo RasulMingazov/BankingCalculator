@@ -5,7 +5,7 @@ import com.psychojean.core.RootResult
 
 interface InterestValidationUseCase {
 
-    suspend fun validate(interest: String): RootResult<Double, InterestValidationError>
+    suspend operator fun invoke(interest: String): RootResult<Double, InterestValidationError>
 
 }
 

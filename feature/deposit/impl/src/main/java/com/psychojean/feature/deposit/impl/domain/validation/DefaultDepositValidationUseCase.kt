@@ -19,11 +19,11 @@ internal class DefaultDepositValidationUseCase @Inject constructor(
     private val monthPeriodValidationUseCase: MonthPeriodValidationUseCase
 ) : DepositValidationUseCase {
 
-    override suspend fun validate(deposit: ValidateDeposit): RootResult<DepositInput, DepositValidationError> =
+    override suspend operator fun invoke(deposit: ValidateDeposit): RootResult<DepositInput, DepositValidationError> =
         withContext(dispatchersList.io()) {
-            val amountValidate = amountValidationUseCase.validate(deposit.amount)
-            val interestValidate = interestValidationUseCase.validate(deposit.interest)
-            val monthPeriodValidate = monthPeriodValidationUseCase.validate(deposit.monthPeriod)
+            val amountValidate = amountValidationUseCase(deposit.amount)
+            val interestValidate = interestValidationUseCase(deposit.interest)
+            val monthPeriodValidate = monthPeriodValidationUseCase(deposit.monthPeriod)
 
             val isFailed =
                 listOf(amountValidate, interestValidate, monthPeriodValidate).any { it.isError }

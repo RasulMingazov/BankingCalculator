@@ -9,7 +9,7 @@ import javax.inject.Inject
 internal class DefaultMonthPeriodValidationUseCase @Inject constructor(
 ) : MonthPeriodValidationUseCase {
 
-    override suspend fun validate(month: String): RootResult<Int, MonthPeriodValidationError> {
+    override suspend operator fun invoke(month: String): RootResult<Int, MonthPeriodValidationError> {
         if (month.isEmpty()) return RootResult.Failure(MonthPeriodValidationError.EMPTY)
         if (month.contains('.') || month.contains(',')) return RootResult.Failure(
             MonthPeriodValidationError.CONTAINS_DOT_OR_COMMA
@@ -21,7 +21,7 @@ internal class DefaultMonthPeriodValidationUseCase @Inject constructor(
             MonthPeriodValidationError.LESS_THAN_1
         )
         if (monthValue > BigInteger.valueOf(120)) return RootResult.Failure(
-            MonthPeriodValidationError.MORE_THAN_60
+            MonthPeriodValidationError.MORE_THAN_120
         )
         return RootResult.Success(monthValue.toInt())
     }

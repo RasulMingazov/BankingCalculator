@@ -10,7 +10,9 @@ data class CalculateDepositUiState(
     val interestRateError: Int? = null,
 
     val monthPeriod: String = "",
-    val monthPeriodError: Int? = null
+    val monthPeriodError: Int? = null,
+
+    val income: String = ""
 )
 
 fun CalculateDepositUiState.toValidateDeposit(): ValidateDeposit = ValidateDeposit(
@@ -18,3 +20,4 @@ fun CalculateDepositUiState.toValidateDeposit(): ValidateDeposit = ValidateDepos
     interest = interestRate.trim().replace(',', '.'),
     monthPeriod = monthPeriod.trim()
 )
+

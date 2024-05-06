@@ -9,7 +9,7 @@ import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodVal
 
 interface DepositValidationUseCase {
 
-    suspend fun validate(deposit: ValidateDeposit): RootResult<DepositInput, DepositValidationError>
+    suspend operator fun invoke(deposit: ValidateDeposit): RootResult<DepositInput, DepositValidationError>
 
 }
 

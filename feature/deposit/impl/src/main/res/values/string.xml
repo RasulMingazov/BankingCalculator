@@ -11,5 +11,5 @@
     <string name="month_period_is_incorrect">Month period is incorrect</string>
     <string name="month_period_cannot_be_empty">Month period can not be empty</string>
     <string name="month_period_cannot_be_less_than_1">Month period can not be less than 1</string>
-    <string name="month_period_cannot_be_more_than_60">Month period can not be more than 60</string>
+    <string name="month_period_cannot_be_more_than_120">Month period can not be more than 120</string>
 </resources>

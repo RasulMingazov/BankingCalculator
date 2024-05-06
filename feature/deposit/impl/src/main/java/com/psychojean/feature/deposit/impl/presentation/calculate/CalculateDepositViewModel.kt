@@ -1,11 +1,10 @@
 package com.psychojean.feature.deposit.impl.presentation.calculate
 
-import android.util.Log
 import com.psychojean.core.ComponentViewModel
 import com.psychojean.feature.deposit.api.domain.CalculateDepositUseCase
+import com.psychojean.feature.deposit.api.domain.DepositInput
 import com.psychojean.feature.deposit.api.domain.validation.DepositValidationError
 import com.psychojean.feature.deposit.api.domain.validation.DepositValidationUseCase
-import com.psychojean.feature.deposit.api.domain.DepositInput
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositIntent
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositUiState
 import com.psychojean.feature.deposit.api.presentation.toValidateDeposit
@@ -21,7 +20,13 @@ class CalculateDepositViewModel @AssistedInject constructor(
     private val calculateDepositUseCase: CalculateDepositUseCase
 ) : ComponentViewModel() {
 
-    private val _state = MutableStateFlow(CalculateDepositUiState(initialDeposit = "350000", interestRate = "4.7", monthPeriod = "9"))
+    private val _state = MutableStateFlow(
+        CalculateDepositUiState(
+            initialDeposit = "350000",
+            interestRate = "4",
+            monthPeriod = "9"
+        )
+    )
     val state = _state.asStateFlow()
 
     init {
@@ -30,43 +35,45 @@ class CalculateDepositViewModel @AssistedInject constructor(
 
     fun accept(intent: CalculateDepositIntent) {
         when (intent) {
-            is CalculateDepositIntent.Calculate -> validate()
             is CalculateDepositIntent.InitialDepositChanged -> initialDepositChanged(intent.deposit)
             is CalculateDepositIntent.InterestRateChanged -> interestRateChanged(intent.rate)
             is CalculateDepositIntent.MonthPeriodChanged -> monthPeriodChanged(intent.period)
         }
     }
 
+    private fun initialDepositChanged(deposit: String) = launch {
+        _state.update { uiState -> uiState.copy(initialDeposit = deposit) }
+        validate()
+    }
+
+    private fun interestRateChanged(interestRate: String) {
+        _state.update { uiState -> uiState.copy(interestRate = interestRate) }
+        validate()
+    }
+
+    private fun monthPeriodChanged(monthPeriod: String) {
+        _state.update { uiState -> uiState.copy(monthPeriod = monthPeriod) }
+        validate()
+    }
+
     private fun validate() = launch {
-        calculateDepositValidationUseCase.validate(state.value.toValidateDeposit())
-            .onFailure(::showValidationError)
-            .onSuccess(::calculate)
+        val validationResult =
+            calculateDepositValidationUseCase(state.value.toValidateDeposit()).onSuccess(::calculate)
+        processValidationError(validationResult.errorOrNull)
     }
 
     private fun calculate(depositInput: DepositInput) = launch {
         calculateDepositUseCase(depositInput).onSuccess {
-           Log.d("CalculateDepositViewModel", it.toString())
+            _state.update { uiState -> uiState.copy(income = it.income.toPlainString()) }
         }
     }
 
-    private fun showValidationError(error: DepositValidationError) = _state.update { uiState ->
+    private fun processValidationError(error: DepositValidationError?) = _state.update { uiState ->
         uiState.copy(
-            interestRateError = error.interestRateError.text,
-            monthPeriodError = error.monthPeriodError.text,
-            initialDepositError = error.amountError.text
+            interestRateError = error?.interestRateError.text,
+            monthPeriodError = error?.monthPeriodError.text,
+            initialDepositError = error?.amountError.text
         )
-    }
-
-    private fun initialDepositChanged(text: String) = _state.update { uiState ->
-        uiState.copy(initialDeposit = text, initialDepositError = null)
-    }
-
-    private fun interestRateChanged(interestRate: String) = _state.update { uiState ->
-        uiState.copy(interestRate = interestRate, interestRateError = null)
-    }
-
-    private fun monthPeriodChanged(monthPeriod: String) = _state.update { uiState ->
-        uiState.copy(monthPeriod = monthPeriod, monthPeriodError = null)
     }
 
     @AssistedFactory

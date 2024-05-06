@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 internal class DefaultInterestValidationUseCase @Inject constructor() : InterestValidationUseCase {
 
-    override suspend fun validate(interest: String): RootResult<Double, InterestValidationError> {
+    override suspend operator fun invoke(interest: String): RootResult<Double, InterestValidationError> {
         if (interest.isEmpty()) return RootResult.Failure(InterestValidationError.EMPTY)
         val interestValue = interest.toBigDecimalOrNull() ?: return RootResult.Failure(
             InterestValidationError.INCORRECT

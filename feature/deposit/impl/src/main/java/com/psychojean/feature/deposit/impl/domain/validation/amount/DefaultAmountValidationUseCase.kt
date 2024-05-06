@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 internal class DefaultAmountValidationUseCase @Inject constructor() : AmountValidationUseCase {
 
-    override suspend fun validate(amount: String): RootResult<BigDecimal, AmountValidationError> {
+    override suspend operator fun invoke(amount: String): RootResult<BigDecimal, AmountValidationError> {
         if (amount.isEmpty()) return RootResult.Failure(AmountValidationError.EMPTY)
         val amountValue = amount.toBigDecimalOrNull() ?: return RootResult.Failure(
             AmountValidationError.INCORRECT

@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 interface AmountValidationUseCase {
 
-    suspend fun validate(amount: String): RootResult<BigDecimal, AmountValidationError>
+    suspend operator fun invoke(amount: String): RootResult<BigDecimal, AmountValidationError>
 
 }
 

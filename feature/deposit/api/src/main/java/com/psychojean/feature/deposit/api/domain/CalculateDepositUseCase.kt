@@ -8,3 +8,5 @@ interface CalculateDepositUseCase {
     suspend operator fun invoke(depositInput: DepositInput): RootResult<DepositOutput, Error>
 
 }
+
+object CalculationError: Error

@@ -9,13 +9,13 @@ import javax.inject.Inject
 internal class DefaultMonthPeriodValidationUseCase @Inject constructor(
 ) : MonthPeriodValidationUseCase {
 
-    override suspend operator fun invoke(month: String): RootResult<Int, MonthPeriodValidationError> {
+    override suspend operator fun invoke(month: String): RootResult<Unit, MonthPeriodValidationError> {
         if (month.isEmpty()) return RootResult.Failure(MonthPeriodValidationError.EMPTY)
-        if (month.contains('.') || month.contains(',')) return RootResult.Failure(
+        if (month.any { it == ',' || it == '.' }) return RootResult.Failure(
             MonthPeriodValidationError.CONTAINS_DOT_OR_COMMA
         )
         val monthValue = month.toBigIntegerOrNull() ?: return RootResult.Failure(
-            MonthPeriodValidationError.INCORRECT
+            MonthPeriodValidationError.NOT_A_DIGIT
         )
         if (monthValue < BigInteger.ONE) return RootResult.Failure(
             MonthPeriodValidationError.LESS_THAN_1
@@ -23,6 +23,6 @@ internal class DefaultMonthPeriodValidationUseCase @Inject constructor(
         if (monthValue > BigInteger.valueOf(120)) return RootResult.Failure(
             MonthPeriodValidationError.MORE_THAN_120
         )
-        return RootResult.Success(monthValue.toInt())
+        return RootResult.Success(Unit)
     }
 }

@@ -1,19 +1,17 @@
 package com.psychojean.feature.deposit.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -60,14 +58,22 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
                 .padding(padding)
         ) {
             Spacer(modifier = Modifier.height(8.dp))
-            InitialDepositTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                value = state.value.initialDeposit,
-                error = state.value.initialDepositError,
-                onValueChange = { component.accept(CalculateDepositIntent.InitialDepositChanged(it)) }
-            )
+            Row {
+                InitialDepositTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    value = state.value.initialDeposit,
+                    error = state.value.initialDepositError,
+                    onValueChange = {
+                        component.accept(
+                            CalculateDepositIntent.InitialDepositChanged(
+                                it
+                            )
+                        )
+                    }
+                )
+            }
             InterestRateTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -86,26 +92,37 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Income: " + state.value.income)
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                text = "Income: " + state.value.income
+            )
         }
     }
 }
 
-@Composable
-fun CalculateButton(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
-    Button(
-        modifier = modifier,
-        onClick = onClick,
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Text(
-            text = stringResource(id = R.string.calculate),
-            style = MaterialTheme.typography.labelLarge
-        )
-    }
-}
-
+//@Composable
+//fun InitialDeposit(
+//    modifier: Modifier = Modifier,
+//    value: String = "",
+//    @StringRes error: Int? = null,
+//    onAccept: (action: CalculateDepositIntent) -> Unit = {}
+//) {
+//    Row(modifier = modifier) {
+//        InitialDepositTextField(
+//            value = value,
+//            error = error,
+//            onValueChange = { onAccept(CalculateDepositIntent.InitialDepositChanged(it)) })
+//
+//    }
+//}
+//
+//@Composable
+//fun CurrencyTypeField(modifier: Modifier = Modifier) {
+//
+//
+//}
 @Composable
 fun InitialDepositTextField(
     value: String,

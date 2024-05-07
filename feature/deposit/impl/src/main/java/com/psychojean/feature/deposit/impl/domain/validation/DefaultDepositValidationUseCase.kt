@@ -5,7 +5,6 @@ import com.psychojean.core.RootResult
 import com.psychojean.feature.deposit.api.domain.validation.DepositValidationError
 import com.psychojean.feature.deposit.api.domain.validation.DepositValidationUseCase
 import com.psychojean.feature.deposit.api.domain.DepositInput
-import com.psychojean.feature.deposit.api.domain.validation.ValidateDeposit
 import com.psychojean.feature.deposit.api.domain.validation.amount.AmountValidationUseCase
 import com.psychojean.feature.deposit.api.domain.validation.interest.InterestValidationUseCase
 import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationUseCase
@@ -19,11 +18,11 @@ internal class DefaultDepositValidationUseCase @Inject constructor(
     private val monthPeriodValidationUseCase: MonthPeriodValidationUseCase
 ) : DepositValidationUseCase {
 
-    override suspend operator fun invoke(deposit: ValidateDeposit): RootResult<DepositInput, DepositValidationError> =
+    override suspend operator fun invoke(input: DepositInput): RootResult<Unit, DepositValidationError> =
         withContext(dispatchersList.io()) {
-            val amountValidate = amountValidationUseCase(deposit.amount)
-            val interestValidate = interestValidationUseCase(deposit.interest)
-            val monthPeriodValidate = monthPeriodValidationUseCase(deposit.monthPeriod)
+            val amountValidate = amountValidationUseCase(input.initialDeposit)
+            val interestValidate = interestValidationUseCase(input.interestRate)
+            val monthPeriodValidate = monthPeriodValidationUseCase(input.monthPeriod)
 
             val isFailed =
                 listOf(amountValidate, interestValidate, monthPeriodValidate).any { it.isError }
@@ -34,12 +33,6 @@ internal class DefaultDepositValidationUseCase @Inject constructor(
                     interestRateError = interestValidate.errorOrNull,
                     monthPeriodError = monthPeriodValidate.errorOrNull
                 )
-            ) else RootResult.Success(
-                DepositInput(
-                    initialDeposit = amountValidate.dataOrThrow,
-                    interest = interestValidate.dataOrThrow,
-                    monthPeriod = monthPeriodValidate.dataOrThrow
-                )
-            )
+            ) else RootResult.Success(Unit)
         }
 }

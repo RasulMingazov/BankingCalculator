@@ -1,23 +1,14 @@
 package com.psychojean.feature.deposit.api.presentation
 
-import com.psychojean.feature.deposit.api.domain.validation.ValidateDeposit
-
 data class CalculateDepositUiState(
-    val initialDeposit: String = "",
+    val initialDeposit: String = "350000",
     val initialDepositError: Int? = null,
 
-    val interestRate: String = "",
+    val interestRate: String = "4.3",
     val interestRateError: Int? = null,
 
-    val monthPeriod: String = "",
+    val monthPeriod: String = "9",
     val monthPeriodError: Int? = null,
 
     val income: String = ""
 )
-
-fun CalculateDepositUiState.toValidateDeposit(): ValidateDeposit = ValidateDeposit(
-    amount = initialDeposit.trim(),
-    interest = interestRate.trim().replace(',', '.'),
-    monthPeriod = monthPeriod.trim()
-)
-

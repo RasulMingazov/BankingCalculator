@@ -7,7 +7,6 @@ import com.psychojean.feature.deposit.api.domain.validation.DepositValidationErr
 import com.psychojean.feature.deposit.api.domain.validation.DepositValidationUseCase
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositIntent
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositUiState
-import com.psychojean.feature.deposit.api.presentation.toValidateDeposit
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,21 +15,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CalculateDepositViewModel @AssistedInject constructor(
-    private val calculateDepositValidationUseCase: DepositValidationUseCase,
-    private val calculateDepositUseCase: CalculateDepositUseCase
+    private val calculateDepositUseCase: CalculateDepositUseCase,
+    private val depositValidationUseCase: DepositValidationUseCase
 ) : ComponentViewModel() {
 
-    private val _state = MutableStateFlow(
-        CalculateDepositUiState(
-            initialDeposit = "350000",
-            interestRate = "4",
-            monthPeriod = "9"
-        )
-    )
+    private val _state = MutableStateFlow(CalculateDepositUiState())
     val state = _state.asStateFlow()
 
     init {
-        validate()
+        calculate()
     }
 
     fun accept(intent: CalculateDepositIntent) {
@@ -46,24 +39,25 @@ class CalculateDepositViewModel @AssistedInject constructor(
         validate()
     }
 
-    private fun interestRateChanged(interestRate: String) {
-        _state.update { uiState -> uiState.copy(interestRate = interestRate) }
+    private fun interestRateChanged(rate: String) = launch {
+        _state.update { uiState -> uiState.copy(interestRate = rate) }
         validate()
     }
 
-    private fun monthPeriodChanged(monthPeriod: String) {
-        _state.update { uiState -> uiState.copy(monthPeriod = monthPeriod) }
+    private fun monthPeriodChanged(period: String) = launch {
+        _state.update { uiState -> uiState.copy(monthPeriod = period) }
         validate()
     }
 
     private fun validate() = launch {
-        val validationResult =
-            calculateDepositValidationUseCase(state.value.toValidateDeposit()).onSuccess(::calculate)
+        val input = state.value.toDepositInput()
+        val validationResult = depositValidationUseCase(input)
+            .onSuccess { calculate(input) }
         processValidationError(validationResult.errorOrNull)
     }
 
-    private fun calculate(depositInput: DepositInput) = launch {
-        calculateDepositUseCase(depositInput).onSuccess {
+    private fun calculate(input: DepositInput = state.value.toDepositInput()) = launch {
+        calculateDepositUseCase(input).onSuccess {
             _state.update { uiState -> uiState.copy(income = it.income.toPlainString()) }
         }
     }

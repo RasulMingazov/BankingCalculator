@@ -1,22 +1,22 @@
 package com.psychojean.feature.deposit.impl.domain.validation.interest
 
 import com.psychojean.core.RootResult
-import com.psychojean.feature.deposit.api.domain.validation.interest.InterestValidationError
+import com.psychojean.feature.deposit.api.domain.validation.interest.InterestRateValidationError
 import com.psychojean.feature.deposit.api.domain.validation.interest.InterestValidationUseCase
 import java.math.BigDecimal
 import javax.inject.Inject
 
 internal class DefaultInterestValidationUseCase @Inject constructor() : InterestValidationUseCase {
 
-    override suspend operator fun invoke(interest: String): RootResult<Double, InterestValidationError> {
-        if (interest.isEmpty()) return RootResult.Failure(InterestValidationError.EMPTY)
+    override suspend operator fun invoke(interest: String): RootResult<Unit, InterestRateValidationError> {
+        if (interest.isEmpty()) return RootResult.Failure(InterestRateValidationError.EMPTY)
         val interestValue = interest.toBigDecimalOrNull() ?: return RootResult.Failure(
-            InterestValidationError.INCORRECT
+            InterestRateValidationError.NOT_A_DIGIT
         )
         if (interestValue < BigDecimal.ZERO)
-            return RootResult.Failure(InterestValidationError.LESS_THAN_0)
+            return RootResult.Failure(InterestRateValidationError.LESS_THAN_0)
         if (interestValue > BigDecimal.valueOf(100))
-            return RootResult.Failure(InterestValidationError.MORE_THAN_100)
-        return RootResult.Success(interestValue.toDouble())
+            return RootResult.Failure(InterestRateValidationError.MORE_THAN_100)
+        return RootResult.Success(Unit)
     }
 }

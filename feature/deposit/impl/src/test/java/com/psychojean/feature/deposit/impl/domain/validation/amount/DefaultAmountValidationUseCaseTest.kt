@@ -37,7 +37,7 @@ class DefaultAmountValidationUseCaseTest {
     fun `validate with non-digit string`() = runTest {
         val result = useCase("abc")
         val expected =
-            RootResult.Failure<Unit, AmountValidationError>(AmountValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, AmountValidationError>(AmountValidationError.NOT_A_NUMBER)
         TestCase.assertEquals(expected, result)
     }
 
@@ -45,7 +45,7 @@ class DefaultAmountValidationUseCaseTest {
     fun `validate with one-digit char`() = runTest {
         val result = useCase("43a1")
         val expected =
-            RootResult.Failure<Unit, AmountValidationError>(AmountValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, AmountValidationError>(AmountValidationError.NOT_A_NUMBER)
         TestCase.assertEquals(expected, result)
     }
 
@@ -76,7 +76,7 @@ class DefaultAmountValidationUseCaseTest {
     fun `validate with leading and trailing spaces`() = runTest {
         val result = useCase("   100   ")
         val expected =
-            RootResult.Failure<Unit, AmountValidationError>(AmountValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, AmountValidationError>(AmountValidationError.NOT_A_NUMBER)
         TestCase.assertEquals(expected, result)
     }
 

@@ -45,7 +45,7 @@ class DefaultInterestValidationUseCaseTest {
     fun `validate with non-digit string`() = runTest {
         val result = useCase("abc")
         val expected =
-            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_NUMBER)
         assertEquals(expected, result)
     }
 
@@ -53,7 +53,7 @@ class DefaultInterestValidationUseCaseTest {
     fun `validate with one-digit char`() = runTest {
         val result = useCase("43a1")
         val expected =
-            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_NUMBER)
         assertEquals(expected, result)
     }
 
@@ -85,7 +85,7 @@ class DefaultInterestValidationUseCaseTest {
     fun `validate with leading and trailing spaces`() = runTest {
         val result = useCase("   10   ")
         val expected =
-            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_NUMBER)
         assertEquals(expected, result)
     }
 
@@ -93,7 +93,7 @@ class DefaultInterestValidationUseCaseTest {
     fun `validate with comma-separated amount`() = runTest {
         val result = useCase("1,0")
         val expected =
-            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, InterestRateValidationError>(InterestRateValidationError.NOT_A_NUMBER)
         assertEquals(expected, result)
     }
 

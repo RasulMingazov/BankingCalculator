@@ -1,6 +1,8 @@
 package com.psychojean.feature.deposit.impl.presentation.calculate
 
 import com.psychojean.core.ComponentViewModel
+import com.psychojean.core.asThousand
+import com.psychojean.feature.deposit.api.CurrencyType
 import com.psychojean.feature.deposit.api.domain.CalculateDepositUseCase
 import com.psychojean.feature.deposit.api.domain.DepositInput
 import com.psychojean.feature.deposit.api.domain.validation.DepositValidationError
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 
 class CalculateDepositViewModel @AssistedInject constructor(
     private val calculateDepositUseCase: CalculateDepositUseCase,
@@ -31,23 +34,22 @@ class CalculateDepositViewModel @AssistedInject constructor(
             is CalculateDepositIntent.InitialDepositChanged -> initialDepositChanged(intent.deposit)
             is CalculateDepositIntent.InterestRateChanged -> interestRateChanged(intent.rate)
             is CalculateDepositIntent.MonthPeriodChanged -> monthPeriodChanged(intent.period)
+            is CalculateDepositIntent.CurrencyTypeChanged -> currencyTypeChanged(intent.currencyType)
         }
+        if (intent is CalculateDepositIntent.FieldUpdate) validate()
     }
 
-    private fun initialDepositChanged(deposit: String) = launch {
-        _state.update { uiState -> uiState.copy(initialDeposit = deposit) }
-        validate()
-    }
+    private fun initialDepositChanged(deposit: String) =
+        _state.update { uiState -> uiState.copy(initialDeposit = deposit.processAmountInput()) }
 
-    private fun interestRateChanged(rate: String) = launch {
-        _state.update { uiState -> uiState.copy(interestRate = rate) }
-        validate()
-    }
+    private fun currencyTypeChanged(currencyType: CurrencyType) =
+        _state.update { uiState -> uiState.copy(selectedCurrencyType = currencyType) }
 
-    private fun monthPeriodChanged(period: String) = launch {
-        _state.update { uiState -> uiState.copy(monthPeriod = period) }
-        validate()
-    }
+    private fun interestRateChanged(rate: String) =
+        _state.update { uiState -> uiState.copy(interestRate = rate.processInterestRateInput()) }
+
+    private fun monthPeriodChanged(period: String) =
+        _state.update { uiState -> uiState.copy(monthPeriod = period.processPeriodInput()) }
 
     private fun validate() = launch {
         val input = state.value.toDepositInput()
@@ -58,7 +60,13 @@ class CalculateDepositViewModel @AssistedInject constructor(
 
     private fun calculate(input: DepositInput = state.value.toDepositInput()) = launch {
         calculateDepositUseCase(input).onSuccess {
-            _state.update { uiState -> uiState.copy(income = it.income.toPlainString()) }
+            _state.update { uiState ->
+                uiState.copy(
+                    income = "${
+                        it.income.setScale(2, RoundingMode.DOWN).toString().asThousand()
+                    } ${state.value.selectedCurrencyType.symbol}"
+                )
+            }
         }
     }
 

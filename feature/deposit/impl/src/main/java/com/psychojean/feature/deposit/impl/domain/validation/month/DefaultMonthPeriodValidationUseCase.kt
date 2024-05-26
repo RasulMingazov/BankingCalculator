@@ -15,7 +15,7 @@ internal class DefaultMonthPeriodValidationUseCase @Inject constructor(
             MonthPeriodValidationError.CONTAINS_DOT_OR_COMMA
         )
         val monthValue = month.toBigIntegerOrNull() ?: return RootResult.Failure(
-            MonthPeriodValidationError.NOT_A_DIGIT
+            MonthPeriodValidationError.NOT_A_NUMBER
         )
         if (monthValue < BigInteger.ONE) return RootResult.Failure(
             MonthPeriodValidationError.LESS_THAN_1

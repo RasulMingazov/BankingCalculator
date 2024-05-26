@@ -1,14 +1,12 @@
 package com.psychojean.feature.deposit.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -16,22 +14,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.psychojean.core.ui.PlaceholderTransformation
-import com.psychojean.core.ui.ThousandTransformation
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositIntent
 
@@ -40,14 +34,14 @@ import com.psychojean.feature.deposit.api.presentation.CalculateDepositIntent
 fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modifier = Modifier) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    val state = component.state.collectAsState()
+    val state by component.state.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,
-                title = stringResource(id = R.string.deposit_calculator)
+                title = stringResource(id = R.string.deposit)
             )
         }
     ) { padding ->
@@ -57,177 +51,36 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
         ) {
+            val columnChildModifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+
             Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                InitialDepositTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    value = state.value.initialDeposit,
-                    error = state.value.initialDepositError,
-                    onValueChange = {
-                        component.accept(
-                            CalculateDepositIntent.InitialDepositChanged(
-                                it
-                            )
-                        )
-                    }
-                )
-            }
-            InterestRateTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                value = state.value.interestRate,
-                error = state.value.interestRateError,
-                onValueChange = { component.accept(CalculateDepositIntent.InterestRateChanged(it)) }
+            InitialDepositField(
+                modifier = columnChildModifier,
+                state = state,
+                onAccept = component::accept
             )
-            MonthPeriodTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                value = state.value.monthPeriod,
-                error = state.value.monthPeriodError,
+            PeriodTextField(
+                modifier = columnChildModifier,
+                value = state.monthPeriod,
+                error = state.monthPeriodError,
                 onValueChange = { component.accept(CalculateDepositIntent.MonthPeriodChanged(it)) }
+            )
+            InterestRateField(
+                modifier = columnChildModifier,
+                state = state,
+                onAccept = component::accept
             )
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                text = "Income: " + state.value.income
+                modifier = columnChildModifier,
+                text = "Income: " + state.income
             )
         }
     }
 }
-
-//@Composable
-//fun InitialDeposit(
-//    modifier: Modifier = Modifier,
-//    value: String = "",
-//    @StringRes error: Int? = null,
-//    onAccept: (action: CalculateDepositIntent) -> Unit = {}
-//) {
-//    Row(modifier = modifier) {
-//        InitialDepositTextField(
-//            value = value,
-//            error = error,
-//            onValueChange = { onAccept(CalculateDepositIntent.InitialDepositChanged(it)) })
-//
-//    }
-//}
-//
-//@Composable
-//fun CurrencyTypeField(modifier: Modifier = Modifier) {
-//
-//
-//}
-@Composable
-fun InitialDepositTextField(
-    value: String,
-    error: Int?,
-    onValueChange: (value: String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        isError = error != null,
-        visualTransformation = if (value.isEmpty()) PlaceholderTransformation(stringResource(id = R.string.enter_initial_deposit)) else ThousandTransformation,
-        supportingText = {
-            if (error != null)
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = error),
-                    color = MaterialTheme.colorScheme.error
-                )
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal,
-            imeAction = ImeAction.Next
-        ),
-        maxLines = 1,
-        label = {
-            Text(
-                text = stringResource(id = R.string.initial_deposit),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    )
-}
-
-@Composable
-fun InterestRateTextField(
-    value: String,
-    error: Int?,
-    onValueChange: (value: String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        isError = error != null,
-        visualTransformation = PlaceholderTransformation(stringResource(id = R.string.enter_interest_rate)),
-        supportingText = {
-            if (error != null)
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = error),
-                    color = MaterialTheme.colorScheme.error
-                )
-        },
-        maxLines = 1,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal,
-            imeAction = ImeAction.Next
-        ),
-        label = {
-            Text(
-                text = stringResource(id = R.string.interest_rate),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    )
-}
-
-@Composable
-fun MonthPeriodTextField(
-    value: String,
-    error: Int?,
-    onValueChange: (value: String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        isError = error != null,
-        visualTransformation = PlaceholderTransformation(stringResource(id = R.string.enter_period)),
-        supportingText = {
-            if (error != null)
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = error),
-                    color = MaterialTheme.colorScheme.error
-                )
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal,
-            imeAction = ImeAction.Next
-        ),
-        maxLines = 1,
-        label = {
-            Text(
-                text = stringResource(id = R.string.months),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    )
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

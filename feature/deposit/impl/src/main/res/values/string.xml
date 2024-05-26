@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="interest_rate_should_not_be_empty">The interest rate must be a number</string>
-    <string name="interest_rate_must_be_number">The interest rate must be a number</string>
-    <string name="interest_rate_must_be_more_than_zero">The interest rate must be more than zero</string>
-    <string name="interest_rate_must_be_less_than_one_hundred">The interest rate must be less than one hundred</string>
-
-    <string name="initial_deposit_should_not_be_empty">The initial deposit should not be empty</string>
-    <string name="initial_deposit_must_be_number">The initial deposit must be a number</string>
-    <string name="initial_deposit_must_be_less_than_one_billion">The initial deposit must be less than one billion</string>
-    <string name="initial_deposit_must_be_more_than_one">The initial deposit must be more than one</string>
-    <string name="initial_deposit_must_not_contain_digits_or_commas">The initial deposit must not contain dots or commas</string>
-
-    <string name="time_period_should_not_be_empty">The time period should not be empty</string>
-    <string name="time_period_must_be_number">The time period deposit must be a number</string>
-    <string name="time_period_must_be_less_than_120">The time period deposit must be less than 120</string>
-    <string name="time_period_must_be_more_than_one">The time period deposit must be more than one</string>
-    <string name="time_period__must_not_contain_digits_or_commas">The time period deposit must not contain dots or commas</string>
+    <string name="should_not_be_empty">Should not be empty</string>
+    <string name="must_be_number">Must be a number</string>
+    <string name="must_be_more_than_zero">Must be more than zero</string>
+    <string name="must_be_more_than_one">Must be more than one</string>
+    <string name="must_be_less_than_120">Must be less than one hundred</string>
+    <string name="must_be_less_than_100_120">Must be less than one hundred</string>
+    <string name="must_be_less_than_one_billion">Must be less than one million</string>
+    <string name="should_not_contain_dots_or_commas">Should not contain dots or commas</string>
 </resources>

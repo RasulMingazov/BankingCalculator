@@ -54,7 +54,7 @@ class DefaultMonthPeriodValidationUseCaseTest {
     fun `validate with non-digit string`() = runTest {
         val result = useCase("abc")
         val expected =
-            RootResult.Failure<Unit, MonthPeriodValidationError>(MonthPeriodValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, MonthPeriodValidationError>(MonthPeriodValidationError.NOT_A_NUMBER)
         assertEquals(expected, result)
     }
 
@@ -62,7 +62,7 @@ class DefaultMonthPeriodValidationUseCaseTest {
     fun `validate with one-digit char`() = runTest {
         val result = useCase("43a1")
         val expected =
-            RootResult.Failure<Unit, MonthPeriodValidationError>(MonthPeriodValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, MonthPeriodValidationError>(MonthPeriodValidationError.NOT_A_NUMBER)
         assertEquals(expected, result)
     }
 
@@ -94,7 +94,7 @@ class DefaultMonthPeriodValidationUseCaseTest {
     fun `validate with leading and trailing spaces`() = runTest {
         val result = useCase("   100   ")
         val expected =
-            RootResult.Failure<Unit, MonthPeriodValidationError>(MonthPeriodValidationError.NOT_A_DIGIT)
+            RootResult.Failure<Unit, MonthPeriodValidationError>(MonthPeriodValidationError.NOT_A_NUMBER)
         assertEquals(expected, result)
     }
 

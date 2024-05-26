@@ -12,7 +12,7 @@ internal class DefaultAmountValidationUseCase @Inject constructor() : AmountVali
         if (amount.isEmpty()) return RootResult.Failure(AmountValidationError.EMPTY)
         if (amount.any { it == ',' || it == '.' }) return RootResult.Failure(AmountValidationError.CONTAINS_DOT_OR_COMMA)
         val value = amount.toBigIntegerOrNull()
-            ?: return RootResult.Failure(AmountValidationError.NOT_A_DIGIT)
+            ?: return RootResult.Failure(AmountValidationError.NOT_A_NUMBER)
         if (value < BigInteger.ONE)
             return RootResult.Failure(AmountValidationError.LESS_THAN_1)
         if (value > BigInteger.valueOf(1_000_000_000)) return RootResult.Failure(AmountValidationError.MORE_THAN_1_BILLION)

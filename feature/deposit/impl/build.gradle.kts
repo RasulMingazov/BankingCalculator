@@ -41,6 +41,8 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
 
+    implementation(libs.kotlin.immutable.list)
+
     implementation(libs.decompose)
     implementation(libs.decompose.extensions)
 

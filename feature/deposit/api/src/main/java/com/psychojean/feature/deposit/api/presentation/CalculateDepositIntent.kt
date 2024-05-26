@@ -1,10 +1,16 @@
 package com.psychojean.feature.deposit.api.presentation
 
+import com.psychojean.feature.deposit.api.CurrencyType
+
 sealed interface CalculateDepositIntent {
 
-    data class InterestRateChanged(val rate: String) : CalculateDepositIntent
+    sealed interface FieldUpdate : CalculateDepositIntent
 
-    data class MonthPeriodChanged(val period: String) : CalculateDepositIntent
+    data class InterestRateChanged(val rate: String) : FieldUpdate
 
-    data class InitialDepositChanged(val deposit: String) : CalculateDepositIntent
+    data class MonthPeriodChanged(val period: String) : FieldUpdate
+
+    data class InitialDepositChanged(val deposit: String) : FieldUpdate
+
+    data class CurrencyTypeChanged(val currencyType: CurrencyType) : FieldUpdate
 }

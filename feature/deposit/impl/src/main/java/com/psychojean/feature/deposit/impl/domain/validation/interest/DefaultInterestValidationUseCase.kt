@@ -11,7 +11,7 @@ internal class DefaultInterestValidationUseCase @Inject constructor() : Interest
     override suspend operator fun invoke(interest: String): RootResult<Unit, InterestRateValidationError> {
         if (interest.isEmpty()) return RootResult.Failure(InterestRateValidationError.EMPTY)
         val interestValue = interest.toBigDecimalOrNull() ?: return RootResult.Failure(
-            InterestRateValidationError.NOT_A_DIGIT
+            InterestRateValidationError.NOT_A_NUMBER
         )
         if (interestValue < BigDecimal.ZERO)
             return RootResult.Failure(InterestRateValidationError.LESS_THAN_0)

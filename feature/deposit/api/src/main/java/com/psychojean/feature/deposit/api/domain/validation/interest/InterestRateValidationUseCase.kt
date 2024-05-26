@@ -10,4 +10,4 @@ interface InterestValidationUseCase {
 }
 
 
-enum class InterestRateValidationError : Error { EMPTY, NOT_A_DIGIT, LESS_THAN_0, MORE_THAN_100 }
+enum class InterestRateValidationError : Error { EMPTY, NOT_A_NUMBER, LESS_THAN_0, MORE_THAN_100 }

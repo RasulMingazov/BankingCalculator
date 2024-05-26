@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="deposit_calculator">Deposit calculator</string>
-    <string name="calculate">Calculate</string>
+    <string name="deposit">Deposit</string>
     <string name="enter_initial_deposit">Enter initial deposit</string>
     <string name="initial_deposit">Initial deposit</string>
     <string name="enter_interest_rate">Enter interest rate</string>
-    <string name="interest_rate">Interest rate</string>
+    <string name="interest_rate">Interest rate(%)</string>
     <string name="enter_period">Enter period</string>
-    <string name="month_period">Month period</string>
-    <string name="months">Months</string>
+    <string name="currency">Currency</string>
+    <string name="period">Period(month)</string>
 </resources>

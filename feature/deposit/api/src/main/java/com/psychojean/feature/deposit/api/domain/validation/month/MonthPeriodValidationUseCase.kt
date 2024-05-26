@@ -10,4 +10,4 @@ interface MonthPeriodValidationUseCase {
 }
 
 enum class MonthPeriodValidationError :
-    Error { EMPTY, CONTAINS_DOT_OR_COMMA, NOT_A_DIGIT, LESS_THAN_1, MORE_THAN_120 }
+    Error { EMPTY, CONTAINS_DOT_OR_COMMA, NOT_A_NUMBER, LESS_THAN_1, MORE_THAN_120 }

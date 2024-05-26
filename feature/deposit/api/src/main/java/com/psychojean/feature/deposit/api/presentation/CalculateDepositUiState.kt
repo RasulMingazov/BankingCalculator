@@ -1,5 +1,11 @@
 package com.psychojean.feature.deposit.api.presentation
 
+import androidx.compose.runtime.Stable
+import com.psychojean.feature.deposit.api.CurrencyType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+
+@Stable
 data class CalculateDepositUiState(
     val initialDeposit: String = "350000",
     val initialDepositError: Int? = null,
@@ -10,5 +16,8 @@ data class CalculateDepositUiState(
     val monthPeriod: String = "9",
     val monthPeriodError: Int? = null,
 
-    val income: String = ""
+    val currencyTypes: ImmutableList<CurrencyType> = CurrencyType.entries.toImmutableList(),
+    val selectedCurrencyType: CurrencyType = currencyTypes.first(),
+
+    val income: String = "",
 )

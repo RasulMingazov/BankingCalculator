@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import com.psychojean.core.ui.PlaceholderTransformation
 import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositUiState
 
@@ -40,7 +39,6 @@ private fun InterestRateTextField(
         onValueChange = onInterestRateChange,
         modifier = modifier,
         isError = error != null,
-        visualTransformation = PlaceholderTransformation(stringResource(id = R.string.enter_interest_rate)),
         supportingText = {
             if (error != null)
                 Text(

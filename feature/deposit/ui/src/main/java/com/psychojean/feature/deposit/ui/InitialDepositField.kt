@@ -27,7 +27,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.psychojean.core.ui.PlaceholderTransformation
 import com.psychojean.core.ui.ThousandTransformation
 import com.psychojean.feature.deposit.api.CurrencyType
 import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
@@ -74,9 +73,7 @@ private fun InitialDepositTextField(
         onValueChange = onInitialDepositChange,
         isError = error != null,
         maxLines = 1,
-        visualTransformation = if (initialDeposit.isEmpty())
-            PlaceholderTransformation(stringResource(id = R.string.enter_initial_deposit))
-        else ThousandTransformation,
+        visualTransformation = ThousandTransformation,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Decimal,
             imeAction = ImeAction.Next

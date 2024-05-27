@@ -36,7 +36,6 @@ interface CalculateDepositStore :
     }
 
     sealed interface Intent {
-
         sealed interface FieldUpdate : Intent
         data class InitialDepositChanged(val deposit: String) : FieldUpdate
         data class CurrencyTypeChanged(val currencyType: CurrencyType) : FieldUpdate

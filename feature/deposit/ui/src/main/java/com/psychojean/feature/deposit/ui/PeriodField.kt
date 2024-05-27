@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import com.psychojean.core.ui.PlaceholderTransformation
 
 @Composable
 fun PeriodTextField(
@@ -24,7 +23,6 @@ fun PeriodTextField(
         onValueChange = onValueChange,
         modifier = modifier,
         isError = error != null,
-        visualTransformation = PlaceholderTransformation(stringResource(id = R.string.enter_period)),
         supportingText = {
             if (error != null)
                 Text(

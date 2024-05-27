@@ -18,6 +18,8 @@ appcompat = "1.6.1"
 material = "1.12.0"
 serialization = "1.9.22"
 composeStableMarker = "1.0.4"
+mvikotlin = "3.3.0"
+uiTextGoogleFonts = "1.6.7"
 
 
 [libraries]
@@ -43,6 +45,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
 decompose-extensions = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
 
+mvikotlin = { group = "com.arkivanov.mvikotlin", name = "mvikotlin", version.ref = "mvikotlin"}
+mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvikotlin"}
+mvikotlin-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlin"}
+
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 
@@ -52,6 +58,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 kotlin-immutable-list = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutable" }
 
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax" }
+androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

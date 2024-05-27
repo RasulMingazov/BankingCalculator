@@ -46,6 +46,10 @@ dependencies {
     implementation(libs.decompose)
     implementation(libs.decompose.extensions)
 
+    implementation(libs.mvikotlin)
+    implementation(libs.mvikotlin.coroutines)
+    implementation(libs.mvikotlin.main)
+
     kapt(libs.dagger.compiler)
     implementation(libs.dagger)
 

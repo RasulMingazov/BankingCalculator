@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.psychojean.core.ui.PlaceholderTransformation
 import com.psychojean.core.ui.ThousandTransformation
 import com.psychojean.feature.deposit.api.CurrencyType
-import com.psychojean.feature.deposit.api.presentation.CalculateDepositIntent
+import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositUiState
 import kotlinx.collections.immutable.ImmutableList
 
@@ -38,22 +38,22 @@ import kotlinx.collections.immutable.ImmutableList
 internal fun InitialDepositField(
     modifier: Modifier = Modifier,
     state: CalculateDepositUiState = CalculateDepositUiState(),
-    onAccept: (action: CalculateDepositIntent) -> Unit = {}
+    onAccept: (intent: CalculateDepositStore.Intent) -> Unit = {}
 ) {
     Row(modifier = modifier) {
         InitialDepositTextField(
             modifier = Modifier.weight(2f),
             initialDeposit = state.initialDeposit,
             error = state.initialDepositError,
-            onInitialDepositChange = { onAccept(CalculateDepositIntent.InitialDepositChanged(it)) }
+            onInitialDepositChange = { onAccept(CalculateDepositStore.Intent.InitialDepositChanged(it)) }
         )
         Spacer(modifier = Modifier.width(8.dp))
         CurrencyTypeSelectField(
             modifier = Modifier.weight(1f),
-            selectedCurrency = state.selectedCurrencyType,
+            selectedCurrencyName = state.selectedCurrencyName,
             currencyTypes = state.currencyTypes,
             onCurrencySelect = { selectedCurrency ->
-                onAccept(CalculateDepositIntent.CurrencyTypeChanged(selectedCurrency))
+                onAccept(CalculateDepositStore.Intent.CurrencyTypeChanged(selectedCurrency))
             }
         )
     }
@@ -105,7 +105,7 @@ private fun InitialDepositTextField(
 @Composable
 private fun CurrencyTypeSelectField(
     currencyTypes: ImmutableList<CurrencyType>,
-    selectedCurrency: CurrencyType,
+    selectedCurrencyName: String,
     onCurrencySelect: (currency: CurrencyType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -117,7 +117,7 @@ private fun CurrencyTypeSelectField(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
     ) {
-        CurrencyTypeTextField(modifier = Modifier.menuAnchor(), currency = selectedCurrency)
+        CurrencyTypeTextField(modifier = Modifier.menuAnchor(), currencyName = selectedCurrencyName)
         CurrencyTypeDropDownMenu(
             expanded = expanded,
             currencyTypes = currencyTypes,
@@ -178,7 +178,7 @@ fun CurrencyTypeMenuItem(
 
 @Composable
 fun CurrencyTypeTextField(
-    currency: CurrencyType,
+    currencyName: String,
     modifier: Modifier = Modifier,
     onValueChange: (value: String) -> Unit = {}
 ) {
@@ -186,7 +186,7 @@ fun CurrencyTypeTextField(
         modifier = modifier,
         readOnly = true,
         onValueChange = onValueChange,
-        value = currency.name,
+        value = currencyName,
         label = {
             Text(
                 maxLines = 1,

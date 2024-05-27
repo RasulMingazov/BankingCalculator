@@ -44,7 +44,7 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(libs.kotlin.immutable.list)
-
+    implementation(libs.mvikotlin)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)

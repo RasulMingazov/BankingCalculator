@@ -14,5 +14,7 @@ dependencies {
     implementation(libs.decompose)
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.immutable.list)
+    implementation(libs.mvikotlin)
+
     compileOnly(libs.compose.stable.marker)
 }

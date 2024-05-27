@@ -2,14 +2,15 @@ package com.psychojean.feature.deposit.api.presentation
 
 import androidx.compose.runtime.Immutable
 import com.arkivanov.decompose.ComponentContext
-import kotlinx.coroutines.flow.StateFlow
+import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
+import kotlinx.coroutines.flow.Flow
 
 @Immutable
 interface CalculateDepositComponent {
 
-    val state: StateFlow<CalculateDepositUiState>
+    val state: Flow<CalculateDepositUiState>
 
-    fun accept(intent: CalculateDepositIntent)
+    fun accept(intent: CalculateDepositStore.Intent)
 
     fun interface Factory {
         operator fun invoke(componentContext: ComponentContext): CalculateDepositComponent

@@ -7,17 +7,20 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Stable
 data class CalculateDepositUiState(
-    val initialDeposit: String = "350000",
+    val initialDeposit: String = "",
     val initialDepositError: Int? = null,
 
-    val interestRate: String = "4.3",
+    val interestRate: String = "",
     val interestRateError: Int? = null,
 
-    val monthPeriod: String = "9",
+    val monthPeriod: String = "",
     val monthPeriodError: Int? = null,
 
     val currencyTypes: ImmutableList<CurrencyType> = CurrencyType.entries.toImmutableList(),
-    val selectedCurrencyType: CurrencyType = currencyTypes.first(),
+    val selectedCurrencyName: String = CurrencyType.RUB.name,
 
+    val incomeRatio: Float? = null,
+    val depositAmount: String = "",
     val income: String = "",
+    val totalValue: String = ""
 )

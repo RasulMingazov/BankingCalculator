@@ -14,12 +14,16 @@ internal class DefaultCalculateDepositUseCase @Inject constructor() : CalculateD
         try {
             val interestRate = depositInput.interestRate.toDouble() / 100
             val period: Double = depositInput.monthPeriod.toDouble() / 12.0
-            val income =
-                depositInput.initialDeposit.toBigDecimal() * interestRate.toBigDecimal() * period.toBigDecimal()
+            val initial = depositInput.initialDeposit.toBigDecimal()
+            val income = initial * interestRate.toBigDecimal() * period.toBigDecimal()
+            val total = income + initial
+            val ratio = (income / total).toFloat()
             RootResult.Success(
                 DepositOutput(
+                    depositAmount = initial,
                     income = income,
-                    endAmount = income + depositInput.initialDeposit.toBigDecimal(),
+                    totalValue = total,
+                    incomeRatio = ratio
                 )
             )
         } catch (exception: Exception) {

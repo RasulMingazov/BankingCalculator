@@ -71,6 +71,7 @@ dependencies {
 
     implementation(libs.decompose)
     implementation(libs.decompose.extensions)
+    implementation(libs.androidx.ui.text.google.fonts)
 
     kapt(libs.dagger.compiler)
     implementation(libs.dagger)

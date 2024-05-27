@@ -11,20 +11,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.psychojean.core.ui.PlaceholderTransformation
-import com.psychojean.feature.deposit.api.presentation.CalculateDepositIntent
+import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositUiState
 
 @Composable
 fun InterestRateField(
     modifier: Modifier = Modifier,
     state: CalculateDepositUiState = CalculateDepositUiState(),
-    onAccept: (action: CalculateDepositIntent) -> Unit = {}
+    onAccept: (intent: CalculateDepositStore.Intent) -> Unit = {}
 ) {
     InterestRateTextField(
         modifier = modifier,
         interestRate = state.interestRate,
         error = state.interestRateError,
-        onInterestRateChange = { onAccept(CalculateDepositIntent.InterestRateChanged(it)) }
+        onInterestRateChange = { onAccept(CalculateDepositStore.Intent.InterestRateChanged(it)) }
     )
 }
 

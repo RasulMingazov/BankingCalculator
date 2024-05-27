@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="deposit">Депозит</string>
+    <string name="deposit_profitability_calculator">Калькулятор доходности вклада</string>
+    <string name="income">Доход: </string>
+    <string name="calculation_results">Результаты расчета</string>
+    <string name="total_value">Сумма в конце срока: </string>
     <string name="enter_initial_deposit">Введите первоначальный взнос</string>
     <string name="initial_deposit">Первоначальный взнос</string>
+    <string name="deposit_amount">Сумма вклада: </string>
     <string name="enter_interest_rate">Введите процентную ставку</string>
     <string name="interest_rate">Процентная ставка(%)</string>
     <string name="enter_period">Введите период</string>

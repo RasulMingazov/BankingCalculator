@@ -2,12 +2,13 @@ package com.psychojean.feature.deposit.impl.domain.calculate_deposit
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.psychojean.feature.deposit.api.CurrencyType
+import com.psychojean.feature.deposit.api.PeriodType
+import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
 import com.psychojean.feature.deposit.api.domain.CalculateDepositUseCase
 import com.psychojean.feature.deposit.api.domain.DepositInput
 import com.psychojean.feature.deposit.api.domain.validation.amount.AmountValidationUseCase
 import com.psychojean.feature.deposit.api.domain.validation.interest.InterestValidationUseCase
-import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationUseCase
-import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
+import com.psychojean.feature.deposit.api.domain.validation.period.PeriodValidationUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -15,8 +16,8 @@ import kotlinx.coroutines.launch
 internal class CalculateDepositExecutor(
     private val calculateDepositUseCase: CalculateDepositUseCase,
     private val amountValidationUseCase: AmountValidationUseCase,
-    private val monthPeriodValidationUseCase: MonthPeriodValidationUseCase,
-    private val interestRateValidationUseCase: InterestValidationUseCase
+    private val interestRateValidationUseCase: InterestValidationUseCase,
+    private val periodValidationUseCase: PeriodValidationUseCase
 ) : CoroutineExecutor<CalculateDepositStore.Intent, Any, CalculateDepositStore.State, CalculateDepositStore.Message, CalculateDepositStore.Label>(
     mainContext = SupervisorJob() + Dispatchers.Main.immediate
 ) {
@@ -43,6 +44,9 @@ internal class CalculateDepositExecutor(
             is CalculateDepositStore.Intent.PeriodChanged -> onPeriodChanged(
                 intent.period,
                 getState
+            )
+            is  CalculateDepositStore.Intent.PeriodTypeChanged -> onPeriodTypeChanged(
+                intent.periodType, getState
             )
 
             is CalculateDepositStore.Intent.CurrencyTypeChanged -> onCurrencyTypeChanged(intent.currencyType)
@@ -89,7 +93,20 @@ internal class CalculateDepositExecutor(
     ) = scope.launch {
         val preprocessPeriod = newPeriod.take(4)
         dispatch(CalculateDepositStore.Message.UpdatePeriod(preprocessPeriod))
-        monthPeriodValidationUseCase(preprocessPeriod).onSuccess {
+        periodValidationUseCase(preprocessPeriod, getState().selectedPeriodType).onSuccess {
+            dispatch(CalculateDepositStore.Message.UpdatePeriodError(null))
+            calculate(getState)
+        }.onFailure {
+            dispatch(CalculateDepositStore.Message.UpdatePeriodError(it))
+        }
+    }
+
+    private fun onPeriodTypeChanged(
+        newPeriodType: PeriodType,
+        getState: () -> CalculateDepositStore.State
+    ) = scope.launch {
+        dispatch(CalculateDepositStore.Message.UpdatePeriodType(newPeriodType))
+        periodValidationUseCase(getState().period, newPeriodType).onSuccess {
             dispatch(CalculateDepositStore.Message.UpdatePeriodError(null))
             calculate(getState)
         }.onFailure {
@@ -107,7 +124,8 @@ internal class CalculateDepositExecutor(
         val input = DepositInput(
             initialDeposit = state.initialDeposit.trim(),
             interestRate = state.interestRate.trim(),
-            monthPeriod = state.period.trim()
+            period = state.period.trim(),
+            periodType = state.selectedPeriodType
         )
         calculateDepositUseCase(input).onSuccess {
             dispatch(CalculateDepositStore.Message.UpdateCalculationResult(it))

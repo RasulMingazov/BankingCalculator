@@ -1,4 +1,4 @@
-package com.psychojean.feature.deposit.api.domain.validation.month
+package com.psychojean.feature.deposit.api.domain.validation.period.month
 
 import com.psychojean.core.Error
 import com.psychojean.core.RootResult

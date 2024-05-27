@@ -213,15 +213,10 @@ private fun CalculateDepositInputFields(
             state = state,
             onAccept = onAccept
         )
-        PeriodTextField(
+        PeriodField(
             modifier = itemsModifier,
-            value = state.monthPeriod,
-            error = state.monthPeriodError,
-            onValueChange = {
-                onAccept(
-                    CalculateDepositStore.Intent.PeriodChanged(it)
-                )
-            }
+            state = state,
+            onAccept = onAccept
         )
         InterestRateField(
             modifier = itemsModifier,

@@ -12,5 +12,5 @@
     <string name="interest_rate">Процентная ставка(%)</string>
     <string name="enter_period">Введите период</string>
     <string name="currency">Валюта</string>
-    <string name="period">Период(месяцы)</string>
+    <string name="period">Период</string>
 </resources>

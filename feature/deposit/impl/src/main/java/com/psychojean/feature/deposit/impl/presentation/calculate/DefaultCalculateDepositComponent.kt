@@ -18,7 +18,7 @@ import java.math.RoundingMode
 internal class DefaultCalculateDepositComponent @AssistedInject constructor(
     @Assisted componentContext: ComponentContext,
     private val calculateDepositStore: CalculateDepositStore,
-    ) : CalculateDepositComponent, ComponentContext by componentContext {
+) : CalculateDepositComponent, ComponentContext by componentContext {
 
     private val store =
         instanceKeeper.getOrCreate { calculateDepositStore }
@@ -27,12 +27,15 @@ internal class DefaultCalculateDepositComponent @AssistedInject constructor(
         CalculateDepositUiState(
             initialDeposit = it.initialDeposit,
             initialDepositError = it.initialDepositError.text,
-            monthPeriod = it.period,
-            monthPeriodError = it.periodError.text,
+            period = it.period,
+            periodError = it.periodError?.monthPeriodValidationError.text
+                ?: it.periodError?.yearPeriodValidationError.text,
             interestRate = it.interestRate,
             interestRateError = it.interestRateError.text,
             currencyTypes = it.currencyTypes.toImmutableList(),
             selectedCurrencyName = it.selectedCurrencyType.name,
+            selectedPeriodName = it.selectedPeriodType.name,
+            periodTypes = it.periodTypes.toImmutableList(),
             incomeRatio = it.incomeRatio,
             depositAmount = "${
                 it.depositAmount?.setScale(2, RoundingMode.DOWN).toString().asThousand()

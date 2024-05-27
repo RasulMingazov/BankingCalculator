@@ -2,6 +2,7 @@ package com.psychojean.feature.deposit.impl.domain
 
 import com.psychojean.core.Error
 import com.psychojean.core.RootResult
+import com.psychojean.feature.deposit.api.PeriodType
 import com.psychojean.feature.deposit.api.domain.CalculateDepositUseCase
 import com.psychojean.feature.deposit.api.domain.CalculationError
 import com.psychojean.feature.deposit.api.domain.DepositInput
@@ -13,7 +14,8 @@ internal class DefaultCalculateDepositUseCase @Inject constructor() : CalculateD
     override suspend fun invoke(depositInput: DepositInput): RootResult<DepositOutput, Error> =
         try {
             val interestRate = depositInput.interestRate.toDouble() / 100
-            val period: Double = depositInput.monthPeriod.toDouble() / 12.0
+            val period: Double =
+                if (depositInput.periodType == PeriodType.MONTH) depositInput.period.toDouble() / 12.0 else depositInput.period.toDouble()
             val initial = depositInput.initialDeposit.toBigDecimal()
             val income = initial * interestRate.toBigDecimal() * period.toBigDecimal()
             val total = income + initial

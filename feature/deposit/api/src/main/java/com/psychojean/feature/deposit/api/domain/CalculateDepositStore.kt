@@ -3,9 +3,10 @@ package com.psychojean.feature.deposit.api.domain
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.psychojean.feature.deposit.api.CurrencyType
+import com.psychojean.feature.deposit.api.PeriodType
 import com.psychojean.feature.deposit.api.domain.validation.amount.AmountValidationError
 import com.psychojean.feature.deposit.api.domain.validation.interest.InterestRateValidationError
-import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationError
+import com.psychojean.feature.deposit.api.domain.validation.period.PeriodValidationError
 import java.math.BigDecimal
 
 interface CalculateDepositStore :
@@ -17,13 +18,16 @@ interface CalculateDepositStore :
         val initialDepositError: AmountValidationError? = null,
 
         val period: String = "9",
-        val periodError: MonthPeriodValidationError? = null,
+        val periodError: PeriodValidationError? = null,
 
         val interestRate: String = "16",
         val interestRateError: InterestRateValidationError? = null,
 
         val selectedCurrencyType: CurrencyType = CurrencyType.RUB,
         val currencyTypes: List<CurrencyType> = CurrencyType.entries,
+
+        val selectedPeriodType: PeriodType = PeriodType.MONTH,
+        val periodTypes: List<PeriodType> = PeriodType.entries,
 
         val depositAmount: BigDecimal? = null,
         val income: BigDecimal? = null,
@@ -39,6 +43,7 @@ interface CalculateDepositStore :
         sealed interface FieldUpdate : Intent
         data class InitialDepositChanged(val deposit: String) : FieldUpdate
         data class CurrencyTypeChanged(val currencyType: CurrencyType) : FieldUpdate
+        data class PeriodTypeChanged(val periodType: PeriodType) : FieldUpdate
         data class InterestRateChanged(val rate: String) : FieldUpdate
         data class PeriodChanged(val period: String) : FieldUpdate
     }
@@ -48,13 +53,13 @@ interface CalculateDepositStore :
         data class UpdateInitialDepositError(val error: AmountValidationError?) : Message
 
         data class UpdatePeriod(val period: String) : Message
-        data class UpdatePeriodError(val error: MonthPeriodValidationError?) : Message
+        data class UpdatePeriodType(val periodType: PeriodType) : Message
+        data class UpdatePeriodError(val error: PeriodValidationError?) : Message
 
         data class UpdateInterestRate(val rate: String) : Message
         data class UpdateInterestRateError(val error: InterestRateValidationError?) : Message
 
         data class UpdateSelectedCurrencyType(val type: CurrencyType) : Message
-        data class UpdateCurrencyTypes(val types: List<CurrencyType>) : Message
 
         data class UpdateCalculationResult(val output: DepositOutput) : Message
     }

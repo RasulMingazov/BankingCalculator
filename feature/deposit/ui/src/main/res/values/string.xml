@@ -12,5 +12,5 @@
     <string name="interest_rate">Interest rate(%)</string>
     <string name="enter_period">Enter period</string>
     <string name="currency">Currency</string>
-    <string name="period">Period(month)</string>
+    <string name="period">Period</string>
 </resources>

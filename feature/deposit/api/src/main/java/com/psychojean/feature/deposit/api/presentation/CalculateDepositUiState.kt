@@ -2,6 +2,7 @@ package com.psychojean.feature.deposit.api.presentation
 
 import androidx.compose.runtime.Stable
 import com.psychojean.feature.deposit.api.CurrencyType
+import com.psychojean.feature.deposit.api.PeriodType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -16,8 +17,11 @@ data class CalculateDepositUiState(
     val interestRate: String = "",
     val interestRateError: Int? = null,
 
-    val monthPeriod: String = "",
-    val monthPeriodError: Int? = null,
+    val period: String = "",
+    val periodError: Int? = null,
+
+    val periodTypes: ImmutableList<PeriodType> = persistentListOf(),
+    val selectedPeriodName: String = "",
 
     val incomeRatio: Float? = null,
     val depositAmount: String = "",

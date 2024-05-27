@@ -3,7 +3,8 @@ package com.psychojean.feature.deposit.impl.presentation.calculate
 import androidx.annotation.StringRes
 import com.psychojean.feature.deposit.api.domain.validation.amount.AmountValidationError
 import com.psychojean.feature.deposit.api.domain.validation.interest.InterestRateValidationError
-import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationError
+import com.psychojean.feature.deposit.api.domain.validation.period.month.MonthPeriodValidationError
+import com.psychojean.feature.deposit.api.domain.validation.period.year.YearPeriodValidationError
 import com.psychojean.feature.deposit.impl.R
 
 @get:StringRes
@@ -35,5 +36,16 @@ internal val MonthPeriodValidationError?.text: Int?
         MonthPeriodValidationError.LESS_THAN_1 -> R.string.must_be_more_than_one
         MonthPeriodValidationError.MORE_THAN_120 -> R.string.must_be_less_than_120
         MonthPeriodValidationError.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
+        else -> null
+    }
+
+@get:StringRes
+internal val YearPeriodValidationError?.text: Int?
+    get() = when (this) {
+        YearPeriodValidationError.EMPTY -> R.string.should_not_be_empty
+        YearPeriodValidationError.NOT_A_NUMBER-> R.string.must_be_number
+        YearPeriodValidationError.LESS_THAN_1 -> R.string.must_be_more_than_one
+        YearPeriodValidationError.MORE_THAN_10 -> R.string.must_be_less_than_10
+        YearPeriodValidationError.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
         else -> null
     }

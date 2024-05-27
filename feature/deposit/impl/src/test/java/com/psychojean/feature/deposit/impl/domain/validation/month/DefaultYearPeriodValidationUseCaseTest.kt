@@ -1,12 +1,13 @@
 package com.psychojean.feature.deposit.impl.domain.validation.month
 
 import com.psychojean.core.RootResult
-import com.psychojean.feature.deposit.api.domain.validation.month.MonthPeriodValidationError
+import com.psychojean.feature.deposit.api.domain.validation.period.month.MonthPeriodValidationError
+import com.psychojean.feature.deposit.impl.domain.validation.period.month.DefaultMonthPeriodValidationUseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class DefaultMonthPeriodValidationUseCaseTest {
+class DefaultYearPeriodValidationUseCaseTest {
 
     private val useCase = DefaultMonthPeriodValidationUseCase()
 

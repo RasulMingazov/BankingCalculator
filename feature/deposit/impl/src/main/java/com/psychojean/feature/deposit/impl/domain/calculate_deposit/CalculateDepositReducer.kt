@@ -29,8 +29,8 @@ internal class CalculateDepositReducer : Reducer<CalculateDepositStore.State, Ca
         is CalculateDepositStore.Message.UpdateSelectedCurrencyType -> copy(
             selectedCurrencyType = msg.type
         )
-        is CalculateDepositStore.Message.UpdateCurrencyTypes -> copy(
-            currencyTypes = msg.types
+        is CalculateDepositStore.Message.UpdatePeriodType -> copy(
+            selectedPeriodType = msg.periodType
         )
         is CalculateDepositStore.Message.UpdateCalculationResult -> copy(
             depositAmount = msg.output.depositAmount,

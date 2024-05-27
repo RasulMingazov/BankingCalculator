@@ -2,6 +2,7 @@ package com.psychojean.feature.deposit.api.domain
 
 import com.psychojean.core.Error
 import com.psychojean.core.RootResult
+import com.psychojean.feature.deposit.api.PeriodType
 import java.math.BigDecimal
 
 interface CalculateDepositUseCase {
@@ -15,7 +16,8 @@ object CalculationError: Error
 data class DepositInput(
     val initialDeposit: String,
     val interestRate: String,
-    val monthPeriod: String
+    val period: String,
+    val periodType: PeriodType
 )
 
 data class DepositOutput(

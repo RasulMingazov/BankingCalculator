@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,19 +23,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,16 +41,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositUiState
+import com.psychojean.field.api.amount.AmountComponent
+import com.psychojean.field.api.currency_type.CurrencyTypeComponent
+import com.psychojean.field.api.interest_rate.InterestRateComponent
+import com.psychojean.field.api.period.PeriodComponent
+import com.psychojean.field.api.period_type.PeriodTypeComponent
+import com.psychojean.field.ui.AmountField
+import com.psychojean.field.ui.CurrencyTypeField
+import com.psychojean.field.ui.InterestRateField
+import com.psychojean.field.ui.PeriodField
+import com.psychojean.field.ui.PeriodTypeField
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modifier = Modifier) {
 
@@ -63,9 +66,7 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopBar(
-                title = stringResource(id = R.string.deposit_profitability_calculator)
-            )
+            TopBar()
         }
     ) { padding ->
         val lazyListState = rememberLazyListState()
@@ -97,9 +98,12 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
             item {
                 CalculateDepositInputFields(
                     modifier = Modifier.graphicsLayer { alpha = 1f - visibilityOffset },
+                    amountComponent = component.amountComponent,
+                    interestRateComponent = component.interestRateComponent,
+                    periodComponent = component.periodComponent,
+                    periodTypeComponent = component.periodTypeComponent,
+                    currencyTypeComponent = component.currencyTypeComponent,
                     itemsModifier = columnChildModifier,
-                    state = state,
-                    onAccept = component::accept
                 )
             }
             item {
@@ -107,8 +111,7 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
                 CalculateDepositResult(
                     modifier = columnChildModifier.fillParentMaxSize(),
                     itemsModifier = columnChildModifier,
-                    state = state,
-                    onAccept = component::accept
+                    state = state
                 )
             }
         }
@@ -119,7 +122,6 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
 @Composable
 fun CalculateDepositResult(
     state: CalculateDepositUiState,
-    onAccept: (intent: CalculateDepositStore.Intent) -> Unit,
     modifier: Modifier = Modifier,
     itemsModifier: Modifier = Modifier,
 
@@ -200,28 +202,53 @@ fun CalculateDepositResult(
 
 @Composable
 private fun CalculateDepositInputFields(
-    state: CalculateDepositUiState,
-    onAccept: (intent: CalculateDepositStore.Intent) -> Unit,
+    amountComponent: AmountComponent,
+    periodComponent: PeriodComponent,
+    interestRateComponent: InterestRateComponent,
+    periodTypeComponent: PeriodTypeComponent,
+    currencyTypeComponent: CurrencyTypeComponent,
     modifier: Modifier = Modifier,
     itemsModifier: Modifier = Modifier,
 ) {
 
     Column(modifier = modifier) {
+        Text(
+            modifier = itemsModifier,
+            text = stringResource(id = R.string.deposit_profitability_calculator),
+            style = MaterialTheme.typography.headlineSmall
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        InitialDepositField(
+        Text(
             modifier = itemsModifier,
-            state = state,
-            onAccept = onAccept
+            text = stringResource(id = R.string.calculate_deposit_description),
+            style = MaterialTheme.typography.bodyLarge
         )
-        PeriodField(
-            modifier = itemsModifier,
-            state = state,
-            onAccept = onAccept
-        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(modifier = itemsModifier) {
+            AmountField(
+                modifier = Modifier.weight(2f),
+                component = amountComponent
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            CurrencyTypeField(
+                modifier = Modifier.weight(1f),
+                component = currencyTypeComponent
+            )
+        }
+        Row(modifier = itemsModifier) {
+            PeriodField(
+                modifier = Modifier.weight(2f),
+                component = periodComponent
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            PeriodTypeField(
+                modifier = Modifier.weight(1f),
+                component = periodTypeComponent
+            )
+        }
         InterestRateField(
             modifier = itemsModifier,
-            state = state,
-            onAccept = onAccept
+            component = interestRateComponent
         )
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -229,20 +256,14 @@ private fun CalculateDepositInputFields(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title: String, modifier: Modifier = Modifier) {
-    LargeTopAppBar(
+fun TopBar(modifier: Modifier = Modifier) {
+    TopAppBar(
         modifier = modifier,
         navigationIcon = {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = null)
             }
-        },
-        title = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineSmall
-            )
-        }
+        }, title = {}
     )
 }
 
@@ -276,10 +297,4 @@ fun LazyListState.EnableDragScroll() {
         else if (isScrollingUp)
             animateScrollToItem(0)
     }
-}
-
-@Composable
-fun keyboardAsState(): State<Boolean> {
-    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
-    return rememberUpdatedState(isImeVisible)
 }

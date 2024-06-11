@@ -40,7 +40,9 @@ android {
 
 dependencies {
 
-    api(project(":feature:deposit:api"))
+    implementation(project(":feature:deposit:api"))
+    implementation(project(":field:ui"))
+    implementation(project(":field:api"))
     implementation(project(":core:ui"))
 
     implementation(libs.kotlin.immutable.list)

@@ -10,6 +10,7 @@ java {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":field:api"))
 
     implementation(libs.decompose)
     implementation(libs.kotlin.coroutines)

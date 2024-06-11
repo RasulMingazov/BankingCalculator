@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="deposit">Депозит</string>
+    <string name="calculate_deposit_description">Рассчитайте доход по вкладам на онлайн калькуляторе по депозиту в банке, как он меняется в зависимости от разных сроков и условий</string>
     <string name="deposit_profitability_calculator">Калькулятор доходности вклада</string>
     <string name="income">Доход: </string>
     <string name="calculation_results">Результаты расчета</string>

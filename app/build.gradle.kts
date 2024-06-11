@@ -61,6 +61,10 @@ dependencies {
     implementation(project(":feature:deposit:impl"))
     implementation(project(":feature:deposit:ui"))
 
+    implementation(project(":field:api"))
+    implementation(project(":field:impl"))
+    implementation(project(":field:ui"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

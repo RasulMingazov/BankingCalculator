@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="should_not_be_empty">Should not be empty</string>
+    <string name="must_be_number">Must be a number</string>
+    <string name="must_be_more_than_zero">Must be more than zero</string>
+    <string name="must_be_more_than_one">Must be more than one</string>
+    <string name="must_be_less_than_120">Must be less than one hundred</string>
+    <string name="must_be_less_than_100_120">Must be less than one hundred and twenty</string>
+    <string name="must_be_less_than_10">Must be less than ten</string>
+    <string name="must_be_less_than_one_billion">Must be less than one million</string>
+    <string name="should_not_contain_dots_or_commas">Should not contain dots or commas</string>
+</resources>

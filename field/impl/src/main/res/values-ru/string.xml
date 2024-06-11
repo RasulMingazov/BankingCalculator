@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="should_not_be_empty">Поле не может быть пустым</string>
+    <string name="must_be_number">Значение должно быть числом</string>
+    <string name="must_be_more_than_zero">Значение должно быть больше нуля</string>
+    <string name="must_be_more_than_one">Значение должно быть больше одного</string>
+    <string name="must_be_less_than_120">Значение должно быть меньше 120</string>
+    <string name="must_be_less_than_100_120">Значение должно быть меньше ста</string>
+    <string name="must_be_less_than_10">Значение должно быть меньше десяти</string>
+    <string name="must_be_less_than_one_billion">Значение должно быть меньше одного миллиарда</string>
+    <string name="should_not_contain_dots_or_commas">Значение не может содержать точек или запятых</string>
+</resources>

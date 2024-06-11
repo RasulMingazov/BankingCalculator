@@ -9,7 +9,8 @@ import java.math.BigDecimal
 
 class DefaultInterestValidationUseCaseTest {
 
-    private val useCase = DefaultInterestValidationUseCase()
+    private val useCase =
+        com.psychojean.field.interestrate.impl.domain.DefaultInterestValidationUseCase()
 
     @Test
     fun `validate with empty string`() = runTest {

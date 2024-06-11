@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="deposit">Deposit</string>
+    <string name="calculate_deposit_description">Calculate the income on deposits in the online calculator for a bank deposit, how it changes depending on different terms and conditions</string>
     <string name="deposit_profitability_calculator">Deposit profitability calculator</string>
     <string name="income">Income: </string>
     <string name="calculation_results">Calculation results</string>

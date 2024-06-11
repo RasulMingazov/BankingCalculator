@@ -1,15 +1,16 @@
 package com.psychojean.feature.deposit.impl.domain.validation.month
 
 import com.psychojean.core.RootResult
-import com.psychojean.feature.deposit.api.domain.validation.period.month.MonthPeriodValidationError
-import com.psychojean.feature.deposit.impl.domain.validation.period.month.DefaultMonthPeriodValidationUseCase
+import com.psychojean.field.api.period.validation.month.MonthPeriodValidationError
+import com.psychojean.field.impl.period.month.DefaultMonthPeriodValidationUseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultYearPeriodValidationUseCaseTest {
 
-    private val useCase = DefaultMonthPeriodValidationUseCase()
+    private val useCase =
+        com.psychojean.field.impl.period.month.DefaultMonthPeriodValidationUseCase()
 
     @Test
     fun `validate with empty string`() = runTest {

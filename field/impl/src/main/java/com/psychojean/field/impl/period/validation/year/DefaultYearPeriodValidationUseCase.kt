@@ -1,27 +1,22 @@
 package com.psychojean.field.impl.period.validation.year
 
-import com.psychojean.core.RootResult
-import com.psychojean.field.api.period.validation.year.YearPeriodValidationError
+import com.psychojean.field.api.period.validation.year.InvalidYearPeriodException
+import com.psychojean.field.api.period.validation.year.InvalidYearType
 import com.psychojean.field.api.period.validation.year.YearPeriodValidationUseCase
+import java.math.BigInteger
 import javax.inject.Inject
 
 internal class DefaultYearPeriodValidationUseCase @Inject constructor(
 ) : YearPeriodValidationUseCase {
 
-    override suspend operator fun invoke(year: String): RootResult<Int, YearPeriodValidationError> {
-        if (year.isEmpty()) return RootResult.Failure(YearPeriodValidationError.EMPTY)
-        if (year.any { it == ',' || it == '.' }) return RootResult.Failure(
-            YearPeriodValidationError.CONTAINS_DOT_OR_COMMA
+    override suspend operator fun invoke(year: String): Result<Int> = runCatching {
+        if (year.isEmpty()) throw InvalidYearPeriodException(InvalidYearType.EMPTY)
+        if (year.any { it == ',' || it == '.' }) throw InvalidYearPeriodException(InvalidYearType.CONTAINS_DOT_OR_COMMA)
+        val yearBigValue = year.toBigIntegerOrNull() ?: throw InvalidYearPeriodException(
+            InvalidYearType.NOT_A_NUMBER
         )
-        val monthValue = year.toIntOrNull() ?: return RootResult.Failure(
-            YearPeriodValidationError.NOT_A_NUMBER
-        )
-        if (monthValue < 1) return RootResult.Failure(
-            YearPeriodValidationError.LESS_THAN_1
-        )
-        if (monthValue > 10) return RootResult.Failure(
-            YearPeriodValidationError.MORE_THAN_10
-        )
-        return RootResult.Success(monthValue)
+        if (yearBigValue < BigInteger.ONE) throw InvalidYearPeriodException(InvalidYearType.LESS_THAN_ONE)
+        if (yearBigValue > BigInteger.TEN) throw InvalidYearPeriodException(InvalidYearType.MORE_THAN_TEN)
+        yearBigValue.toInt()
     }
 }

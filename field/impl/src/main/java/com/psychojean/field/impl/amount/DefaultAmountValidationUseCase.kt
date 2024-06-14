@@ -1,23 +1,23 @@
 package com.psychojean.field.impl.amount
 
-import com.psychojean.core.RootResult
-import com.psychojean.field.api.amount.AmountValidationError
 import com.psychojean.field.api.amount.AmountValidationUseCase
+import com.psychojean.field.api.amount.InvalidAmountException
+import com.psychojean.field.api.amount.InvalidAmountType
 import java.math.BigInteger
 import javax.inject.Inject
 
-internal class DefaultAmountValidationUseCase @Inject constructor() :
-    AmountValidationUseCase {
+internal class DefaultAmountValidationUseCase @Inject constructor() : AmountValidationUseCase {
 
-    override suspend operator fun invoke(value: String): RootResult<BigInteger, AmountValidationError> {
-        if (value.isEmpty()) return RootResult.Failure(AmountValidationError.EMPTY)
-        if (value.any { it == ',' || it == '.' }) return RootResult.Failure(AmountValidationError.CONTAINS_DOT_OR_COMMA)
+    override suspend operator fun invoke(value: String): Result<BigInteger> = runCatching {
+        if (value.isEmpty()) throw InvalidAmountException(InvalidAmountType.EMPTY)
+        if (value.any { it == ',' || it == '.' }) throw InvalidAmountException(InvalidAmountType.CONTAINS_DOT_OR_COMMA)
         val amount = value.toBigIntegerOrNull()
-            ?: return RootResult.Failure(AmountValidationError.NOT_A_NUMBER)
-        if (amount < BigInteger.ONE)
-            return RootResult.Failure(AmountValidationError.LESS_THAN_1)
-        if (amount > BigInteger.valueOf(1_000_000_000)) return RootResult.Failure(AmountValidationError.MORE_THAN_1_BILLION)
-        return RootResult.Success(amount)
+            ?: throw InvalidAmountException(InvalidAmountType.NOT_A_NUMBER)
+        if (amount < BigInteger.ONE) throw InvalidAmountException(InvalidAmountType.LESS_THAN_ONE)
+        if (amount > BigInteger.valueOf(1_000_000_000)) throw InvalidAmountException(
+            InvalidAmountType.MORE_THAN_ONE_BILLION
+        )
+        amount
     }
 }
 

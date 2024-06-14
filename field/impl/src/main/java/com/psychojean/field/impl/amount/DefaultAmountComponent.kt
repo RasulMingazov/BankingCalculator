@@ -5,8 +5,9 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.SerializableBigInteger
 import com.psychojean.field.api.amount.AmountComponent
-import com.psychojean.field.api.amount.AmountValidationError
 import com.psychojean.field.api.amount.AmountValidationUseCase
+import com.psychojean.field.api.amount.InvalidAmountException
+import com.psychojean.field.api.amount.InvalidAmountType
 import com.psychojean.field.impl.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -67,13 +68,12 @@ internal class DefaultAmountComponent @AssistedInject constructor(
 
     override fun onChange(value: String) {
         scope.launch {
-            val preprocessAmount = value.filter { it.isDigit() }.take(10)
-            _text.update { preprocessAmount }
-            amountValidationUseCase(preprocessAmount).onSuccess { rate ->
+            _text.update { value.filter { it.isDigit() }.take(10) }
+            amountValidationUseCase(_text.value).onSuccess { rate ->
                 _error.update { null }
                 _value.update { rate }
-            }.onFailure { error ->
-                _error.update { error.text }
+            }.onFailure { exception ->
+                if (exception is InvalidAmountException) _error.update { exception.type.text }
             }
         }
     }
@@ -95,12 +95,12 @@ private data class AmountSerializable(
 )
 
 @get:StringRes
-private val AmountValidationError?.text: Int?
+private val InvalidAmountType?.text: Int?
     get() = when (this) {
-        AmountValidationError.NOT_A_NUMBER -> R.string.must_be_number
-        AmountValidationError.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
-        AmountValidationError.MORE_THAN_1_BILLION -> R.string.must_be_less_than_one_billion
-        AmountValidationError.EMPTY -> R.string.should_not_be_empty
-        AmountValidationError.LESS_THAN_1 -> R.string.must_be_more_than_one
+        InvalidAmountType.NOT_A_NUMBER -> R.string.must_be_number
+        InvalidAmountType.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
+        InvalidAmountType.MORE_THAN_ONE_BILLION -> R.string.must_be_less_than_one_billion
+        InvalidAmountType.EMPTY -> R.string.should_not_be_empty
+        InvalidAmountType.LESS_THAN_ONE -> R.string.must_be_more_than_one
         else -> null
     }

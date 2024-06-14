@@ -4,8 +4,9 @@ import androidx.annotation.StringRes
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.field.api.interest_rate.InterestRateComponent
-import com.psychojean.field.api.interest_rate.InterestRateValidationError
 import com.psychojean.field.api.interest_rate.InterestValidationUseCase
+import com.psychojean.field.api.interest_rate.InvalidInterestRateException
+import com.psychojean.field.api.interest_rate.InvalidInterestRateType
 import com.psychojean.field.impl.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -70,8 +71,8 @@ internal class DefaultInterestRateComponent @AssistedInject constructor(
             interestRateValidationUseCase(preprocessInterestRate).onSuccess { rate ->
                 _error.update { null }
                 _value.update { rate }
-            }.onFailure { error ->
-                _error.update { error.text }
+            }.onFailure { exception ->
+                if (exception is InvalidInterestRateException) _error.update { exception.type.text }
             }
         }
     }
@@ -93,11 +94,11 @@ private data class InterestRateSerializable(
 )
 
 @get:StringRes
-private val InterestRateValidationError?.text: Int?
+private val InvalidInterestRateType?.text: Int?
     get() = when (this) {
-        InterestRateValidationError.LESS_THAN_0 -> R.string.must_be_more_than_zero
-        InterestRateValidationError.MORE_THAN_100 -> R.string.must_be_less_than_100_120
-        InterestRateValidationError.NOT_A_NUMBER -> R.string.must_be_number
-        InterestRateValidationError.EMPTY -> R.string.should_not_be_empty
+        InvalidInterestRateType.LESS_THAN_ZERO -> R.string.must_be_more_than_zero
+        InvalidInterestRateType.MORE_THAN_ONE_HUNDRED -> R.string.must_be_less_than_100_120
+        InvalidInterestRateType.NOT_A_NUMBER -> R.string.must_be_number
+        InvalidInterestRateType.EMPTY -> R.string.should_not_be_empty
         else -> null
     }

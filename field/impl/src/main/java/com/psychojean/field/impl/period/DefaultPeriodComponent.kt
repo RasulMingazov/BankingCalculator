@@ -6,8 +6,10 @@ import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.PeriodType
 import com.psychojean.field.api.period.PeriodComponent
 import com.psychojean.field.api.period.validation.PeriodValidationUseCase
-import com.psychojean.field.api.period.validation.month.MonthPeriodValidationError
-import com.psychojean.field.api.period.validation.year.YearPeriodValidationError
+import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodException
+import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodType
+import com.psychojean.field.api.period.validation.year.InvalidYearPeriodException
+import com.psychojean.field.api.period.validation.year.InvalidYearType
 import com.psychojean.field.impl.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -73,16 +75,15 @@ internal class DefaultPeriodComponent @AssistedInject constructor(
 
     override fun onChange(value: String) {
         scope.launch {
-            val preprocessPeriod = value.take(4)
-            _text.update { preprocessPeriod }
-            periodValidationUseCase(preprocessPeriod, periodType = periodType).onSuccess { period ->
-                _error.update { null }
-                _value.update { period }
-            }.onFailure { error ->
-                _error.update {
-                    error.yearPeriodValidationError.text ?: error.monthPeriodValidationError.text
+            _text.update { value.take(4) }
+            periodValidationUseCase(period = text.value, periodType = periodType)
+                .onSuccess { period ->
+                    _error.update { null }
+                    _value.update { period }
+                }.onFailure { exception ->
+                    if (exception is InvalidYearPeriodException) _error.update { exception.type.text }
+                    if (exception is InvalidMonthPeriodException) _error.update { exception.type.text }
                 }
-            }
         }
     }
 
@@ -110,23 +111,23 @@ private data class PeriodSerializable(
 )
 
 @get:StringRes
-internal val MonthPeriodValidationError?.text: Int?
+internal val InvalidMonthPeriodType?.text: Int?
     get() = when (this) {
-        MonthPeriodValidationError.EMPTY -> R.string.should_not_be_empty
-        MonthPeriodValidationError.NOT_A_NUMBER -> R.string.must_be_number
-        MonthPeriodValidationError.LESS_THAN_1 -> R.string.must_be_more_than_one
-        MonthPeriodValidationError.MORE_THAN_120 -> R.string.must_be_less_than_120
-        MonthPeriodValidationError.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
+        InvalidMonthPeriodType.EMPTY -> R.string.should_not_be_empty
+        InvalidMonthPeriodType.NOT_A_NUMBER -> R.string.must_be_number
+        InvalidMonthPeriodType.LESS_THAN_ONE -> R.string.must_be_more_than_one
+        InvalidMonthPeriodType.MORE_THAN_120 -> R.string.must_be_less_than_120
+        InvalidMonthPeriodType.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
         else -> null
     }
 
 @get:StringRes
-internal val YearPeriodValidationError?.text: Int?
+internal val InvalidYearType?.text: Int?
     get() = when (this) {
-        YearPeriodValidationError.EMPTY -> R.string.should_not_be_empty
-        YearPeriodValidationError.NOT_A_NUMBER -> R.string.must_be_number
-        YearPeriodValidationError.LESS_THAN_1 -> R.string.must_be_more_than_one
-        YearPeriodValidationError.MORE_THAN_10 -> R.string.must_be_less_than_10
-        YearPeriodValidationError.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
+        InvalidYearType.EMPTY -> R.string.should_not_be_empty
+        InvalidYearType.NOT_A_NUMBER -> R.string.must_be_number
+        InvalidYearType.LESS_THAN_ONE -> R.string.must_be_more_than_one
+        InvalidYearType.MORE_THAN_TEN -> R.string.must_be_less_than_10
+        InvalidYearType.CONTAINS_DOT_OR_COMMA -> R.string.should_not_contain_dots_or_commas
         else -> null
     }

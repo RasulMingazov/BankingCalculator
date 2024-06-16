@@ -2,12 +2,12 @@ package com.psychojean.field.impl.period.validation.year
 
 import com.psychojean.field.api.period.validation.year.InvalidYearPeriodException
 import com.psychojean.field.api.period.validation.year.InvalidYearType
-import com.psychojean.field.api.period.validation.year.YearPeriodValidationUseCase
+import com.psychojean.field.api.period.validation.year.ConvertYearPeriodInputUseCase
 import java.math.BigInteger
 import javax.inject.Inject
 
-internal class DefaultYearPeriodValidationUseCase @Inject constructor(
-) : YearPeriodValidationUseCase {
+internal class DefaultConvertYearPeriodInputUseCase @Inject constructor(
+) : ConvertYearPeriodInputUseCase {
 
     override suspend operator fun invoke(year: String): Result<Int> = runCatching {
         if (year.isEmpty()) throw InvalidYearPeriodException(InvalidYearType.EMPTY)

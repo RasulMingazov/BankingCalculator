@@ -2,7 +2,7 @@ package com.psychojean.field.api.period.validation
 
 import com.psychojean.core.PeriodType
 
-interface PeriodValidationUseCase {
+interface ConvertPeriodInputUseCase {
 
     suspend operator fun invoke(
         period: String,

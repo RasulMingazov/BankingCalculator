@@ -1,6 +1,6 @@
 package com.psychojean.field.api.period.validation.month
 
-interface MonthPeriodValidationUseCase {
+interface ConvertMonthPeriodInputUseCase {
 
     suspend operator fun invoke(month: String): Result<Int>
 

@@ -6,10 +6,10 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class DefaultYearPeriodValidationUseCaseTest {
+class DefaultConvertYearPeriodInputUseCaseTest {
 
     private val useCase =
-        DefaultYearPeriodValidationUseCase()
+        DefaultConvertYearPeriodInputUseCase()
 
     @Test
     fun `validate with empty string`() = runTest {

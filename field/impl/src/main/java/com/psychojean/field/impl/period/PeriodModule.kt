@@ -1,12 +1,12 @@
 package com.psychojean.field.impl.period
 
 import com.psychojean.field.api.period.PeriodComponent
-import com.psychojean.field.api.period.validation.PeriodValidationUseCase
-import com.psychojean.field.api.period.validation.month.MonthPeriodValidationUseCase
-import com.psychojean.field.api.period.validation.year.YearPeriodValidationUseCase
-import com.psychojean.field.impl.period.validation.DefaultPeriodValidationUseCase
-import com.psychojean.field.impl.period.validation.month.DefaultMonthPeriodValidationUseCase
-import com.psychojean.field.impl.period.validation.year.DefaultYearPeriodValidationUseCase
+import com.psychojean.field.api.period.validation.ConvertPeriodInputUseCase
+import com.psychojean.field.api.period.validation.month.ConvertMonthPeriodInputUseCase
+import com.psychojean.field.api.period.validation.year.ConvertYearPeriodInputUseCase
+import com.psychojean.field.impl.period.validation.DefaultConvertPeriodInputUseCase
+import com.psychojean.field.impl.period.validation.month.DefaultConvertMonthPeriodInputUseCase
+import com.psychojean.field.impl.period.validation.year.DefaultConvertYearPeriodInputUseCase
 import dagger.Binds
 import dagger.Module
 
@@ -14,13 +14,13 @@ import dagger.Module
 internal interface PeriodModule {
 
     @Binds
-    fun bindMonthValidationUseCase(monthValidationUseCase: DefaultMonthPeriodValidationUseCase): MonthPeriodValidationUseCase
+    fun bindMonthValidationUseCase(monthValidationUseCase: DefaultConvertMonthPeriodInputUseCase): ConvertMonthPeriodInputUseCase
 
     @Binds
-    fun bindYearValidationUseCase(yearValidationUseCase: DefaultYearPeriodValidationUseCase): YearPeriodValidationUseCase
+    fun bindYearValidationUseCase(yearValidationUseCase: DefaultConvertYearPeriodInputUseCase): ConvertYearPeriodInputUseCase
 
     @Binds
-    fun bindPeriodValidationUseCase(periodValidationUseCase: DefaultPeriodValidationUseCase): PeriodValidationUseCase
+    fun bindPeriodValidationUseCase(periodValidationUseCase: DefaultConvertPeriodInputUseCase): ConvertPeriodInputUseCase
 
     @Binds
     fun bindPeriodFactory(periodComponentFactory: DefaultPeriodComponent.Factory): PeriodComponent.Factory

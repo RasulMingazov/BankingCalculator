@@ -5,7 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.PeriodType
 import com.psychojean.field.api.period.PeriodComponent
-import com.psychojean.field.api.period.validation.PeriodValidationUseCase
+import com.psychojean.field.api.period.validation.ConvertPeriodInputUseCase
 import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodException
 import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodType
 import com.psychojean.field.api.period.validation.year.InvalidYearPeriodException
@@ -29,7 +29,7 @@ internal class DefaultPeriodComponent @AssistedInject constructor(
     @Assisted componentContext: ComponentContext,
     @Assisted period: Int,
     @Assisted periodType: PeriodType,
-    private val periodValidationUseCase: PeriodValidationUseCase,
+    private val convertPeriodInputUseCase: ConvertPeriodInputUseCase,
 ) : PeriodComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -76,7 +76,7 @@ internal class DefaultPeriodComponent @AssistedInject constructor(
     override fun onChange(value: String) {
         scope.launch {
             _text.update { value.take(4) }
-            periodValidationUseCase(period = text.value, periodType = periodType)
+            convertPeriodInputUseCase(period = text.value, periodType = periodType)
                 .onSuccess { period ->
                     _error.update { null }
                     _value.update { period }

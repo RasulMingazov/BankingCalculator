@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.field.api.interest_rate.InterestRateComponent
-import com.psychojean.field.api.interest_rate.InterestValidationUseCase
+import com.psychojean.field.api.interest_rate.ConvertInterestInputUseCase
 import com.psychojean.field.api.interest_rate.InvalidInterestRateException
 import com.psychojean.field.api.interest_rate.InvalidInterestRateType
 import com.psychojean.field.impl.R
@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
 internal class DefaultInterestRateComponent @AssistedInject constructor(
     @Assisted componentContext: ComponentContext,
     @Assisted rate: Double,
-    private val interestRateValidationUseCase: InterestValidationUseCase,
+    private val convertInterestInputUseCase: ConvertInterestInputUseCase,
 ) : InterestRateComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -68,7 +68,7 @@ internal class DefaultInterestRateComponent @AssistedInject constructor(
         scope.launch {
             val preprocessInterestRate = value.take(4)
             _text.update { preprocessInterestRate }
-            interestRateValidationUseCase(preprocessInterestRate).onSuccess { rate ->
+            convertInterestInputUseCase(preprocessInterestRate).onSuccess { rate ->
                 _error.update { null }
                 _value.update { rate }
             }.onFailure { exception ->

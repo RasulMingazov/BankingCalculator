@@ -5,7 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.SerializableBigInteger
 import com.psychojean.field.api.amount.AmountComponent
-import com.psychojean.field.api.amount.AmountValidationUseCase
+import com.psychojean.field.api.amount.ConvertAmountInputUseCase
 import com.psychojean.field.api.amount.InvalidAmountException
 import com.psychojean.field.api.amount.InvalidAmountType
 import com.psychojean.field.impl.R
@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
 import java.math.BigInteger
 
 internal class DefaultAmountComponent @AssistedInject constructor(
-    private val amountValidationUseCase: AmountValidationUseCase,
+    private val convertAmountInputUseCase: ConvertAmountInputUseCase,
     @Assisted componentContext: ComponentContext,
     @Assisted amount: BigInteger
 ) : AmountComponent, ComponentContext by componentContext {
@@ -69,7 +69,7 @@ internal class DefaultAmountComponent @AssistedInject constructor(
     override fun onChange(value: String) {
         scope.launch {
             _text.update { value.filter { it.isDigit() }.take(10) }
-            amountValidationUseCase(_text.value).onSuccess { rate ->
+            convertAmountInputUseCase(_text.value).onSuccess { rate ->
                 _error.update { null }
                 _value.update { rate }
             }.onFailure { exception ->

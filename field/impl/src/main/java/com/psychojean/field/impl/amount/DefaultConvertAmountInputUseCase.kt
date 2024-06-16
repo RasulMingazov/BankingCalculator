@@ -1,12 +1,12 @@
 package com.psychojean.field.impl.amount
 
-import com.psychojean.field.api.amount.AmountValidationUseCase
+import com.psychojean.field.api.amount.ConvertAmountInputUseCase
 import com.psychojean.field.api.amount.InvalidAmountException
 import com.psychojean.field.api.amount.InvalidAmountType
 import java.math.BigInteger
 import javax.inject.Inject
 
-internal class DefaultAmountValidationUseCase @Inject constructor() : AmountValidationUseCase {
+internal class DefaultConvertAmountInputUseCase @Inject constructor() : ConvertAmountInputUseCase {
 
     override suspend operator fun invoke(value: String): Result<BigInteger> = runCatching {
         if (value.isEmpty()) throw InvalidAmountException(InvalidAmountType.EMPTY)

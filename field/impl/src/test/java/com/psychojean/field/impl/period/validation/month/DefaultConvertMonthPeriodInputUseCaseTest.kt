@@ -6,9 +6,9 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class DefaultMonthPeriodValidationUseCaseTest {
+class DefaultConvertMonthPeriodInputUseCaseTest {
 
-    private val useCase = DefaultMonthPeriodValidationUseCase()
+    private val useCase = DefaultConvertMonthPeriodInputUseCase()
 
     @Test
     fun `validate with empty string`() = runTest {

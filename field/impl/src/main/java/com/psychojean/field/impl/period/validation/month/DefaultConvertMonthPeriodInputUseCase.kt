@@ -2,12 +2,12 @@ package com.psychojean.field.impl.period.validation.month
 
 import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodException
 import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodType
-import com.psychojean.field.api.period.validation.month.MonthPeriodValidationUseCase
+import com.psychojean.field.api.period.validation.month.ConvertMonthPeriodInputUseCase
 import java.math.BigInteger
 import javax.inject.Inject
 
-internal class DefaultMonthPeriodValidationUseCase @Inject constructor(
-) : MonthPeriodValidationUseCase {
+internal class DefaultConvertMonthPeriodInputUseCase @Inject constructor(
+) : ConvertMonthPeriodInputUseCase {
 
     override suspend operator fun invoke(month: String): Result<Int> = runCatching {
         if (month.isEmpty()) throw InvalidMonthPeriodException(InvalidMonthPeriodType.EMPTY)

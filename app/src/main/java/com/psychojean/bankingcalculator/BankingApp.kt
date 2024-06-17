@@ -1,22 +1,15 @@
 package com.psychojean.bankingcalculator
 
 import android.app.Application
-import com.psychojean.bankingcalculator.di.DaggerMainDaggerComponent
-import com.psychojean.bankingcalculator.di.MainDaggerComponent
+import com.psychojean.bankingcalculator.di.AppContainer
+import com.psychojean.bankingcalculator.di.DefaultAppContainer
 
 class BankingApp : Application() {
 
-    internal lateinit var mainDaggerComponent: MainDaggerComponent
+    internal lateinit var appContainer: AppContainer
 
     override fun onCreate() {
         super.onCreate()
-
-        mainDaggerComponent = DaggerMainDaggerComponent
-            .builder()
-            .application(this)
-            .build()
-
-        mainDaggerComponent.inject(this)
-
+        appContainer = DefaultAppContainer()
     }
 }

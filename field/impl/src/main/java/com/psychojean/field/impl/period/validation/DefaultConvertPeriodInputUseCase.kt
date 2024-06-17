@@ -4,9 +4,8 @@ import com.psychojean.core.PeriodType
 import com.psychojean.field.api.period.validation.ConvertPeriodInputUseCase
 import com.psychojean.field.api.period.validation.month.ConvertMonthPeriodInputUseCase
 import com.psychojean.field.api.period.validation.year.ConvertYearPeriodInputUseCase
-import javax.inject.Inject
 
-internal class DefaultConvertPeriodInputUseCase @Inject constructor(
+internal class DefaultConvertPeriodInputUseCase(
     private val convertYearPeriodInputUseCase: ConvertYearPeriodInputUseCase,
     private val convertMonthPeriodInputUseCase: ConvertMonthPeriodInputUseCase
 ) : ConvertPeriodInputUseCase {

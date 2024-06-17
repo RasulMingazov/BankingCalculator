@@ -14,13 +14,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.defaultComponentContext
 import com.psychojean.bankingcalculator.ui.theme.BankingCalculatorTheme
-import com.psychojean.root.impl.DefaultRootComponent
+import com.psychojean.root.api.RootComponent
 import com.psychojean.root.impl.RootContent
 
 class MainActivity : ComponentActivity() {
 
-    private val component: DefaultRootComponent by lazy {
-        (application as BankingApp).mainDaggerComponent.rootComponentFactory(defaultComponentContext())
+    private val component: RootComponent by lazy {
+        (application as BankingApp).appContainer.rootContainer.rootComponentFactory(
+            defaultComponentContext()
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +37,6 @@ class MainActivity : ComponentActivity() {
             ),
         )
         super.onCreate(savedInstanceState)
-        (application as BankingApp).mainDaggerComponent.inject(this)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {

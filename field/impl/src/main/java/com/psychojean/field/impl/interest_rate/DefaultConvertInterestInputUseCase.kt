@@ -3,9 +3,8 @@ package com.psychojean.field.impl.interest_rate
 import com.psychojean.field.api.interest_rate.ConvertInterestInputUseCase
 import com.psychojean.field.api.interest_rate.InvalidInterestRateException
 import com.psychojean.field.api.interest_rate.InvalidInterestRateType
-import javax.inject.Inject
 
-internal class DefaultConvertInterestInputUseCase @Inject constructor() :
+internal class DefaultConvertInterestInputUseCase :
     ConvertInterestInputUseCase {
 
     override suspend operator fun invoke(value: String): Result<Double> = runCatching {

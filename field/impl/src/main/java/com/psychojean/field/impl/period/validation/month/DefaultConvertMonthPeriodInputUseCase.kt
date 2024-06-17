@@ -4,9 +4,8 @@ import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodExcept
 import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodType
 import com.psychojean.field.api.period.validation.month.ConvertMonthPeriodInputUseCase
 import java.math.BigInteger
-import javax.inject.Inject
 
-internal class DefaultConvertMonthPeriodInputUseCase @Inject constructor(
+internal class DefaultConvertMonthPeriodInputUseCase(
 ) : ConvertMonthPeriodInputUseCase {
 
     override suspend operator fun invoke(month: String): Result<Int> = runCatching {

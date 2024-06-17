@@ -4,9 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.PeriodType
 import com.psychojean.field.api.period_type.PeriodTypeComponent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -19,10 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 
-internal class DefaultPeriodTypeComponent @AssistedInject constructor(
-    @Assisted componentContext: ComponentContext,
-    @Assisted periodType: PeriodType,
-    @Assisted periodTypes: List<PeriodType>,
+internal class DefaultPeriodTypeComponent(
+    componentContext: ComponentContext,
+    periodType: PeriodType,
+    periodTypes: List<PeriodType>,
 ) : PeriodTypeComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -60,13 +57,12 @@ internal class DefaultPeriodTypeComponent @AssistedInject constructor(
         _value.update { type }
     }
 
-    @AssistedFactory
-    interface Factory : PeriodTypeComponent.Factory {
+    class Factory : PeriodTypeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             periodType: PeriodType,
             periodTypes: List<PeriodType>
-        ): DefaultPeriodTypeComponent
+        ): PeriodTypeComponent = DefaultPeriodTypeComponent(componentContext, periodType, periodTypes)
     }
 }
 

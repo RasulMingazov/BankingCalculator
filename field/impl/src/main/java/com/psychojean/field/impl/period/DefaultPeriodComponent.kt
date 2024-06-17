@@ -11,9 +11,6 @@ import com.psychojean.field.api.period.validation.month.InvalidMonthPeriodType
 import com.psychojean.field.api.period.validation.year.InvalidYearPeriodException
 import com.psychojean.field.api.period.validation.year.InvalidYearType
 import com.psychojean.field.impl.R
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,10 +22,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-internal class DefaultPeriodComponent @AssistedInject constructor(
-    @Assisted componentContext: ComponentContext,
-    @Assisted period: Int,
-    @Assisted periodType: PeriodType,
+internal class DefaultPeriodComponent(
+    componentContext: ComponentContext,
+    period: Int,
+    periodType: PeriodType,
     private val convertPeriodInputUseCase: ConvertPeriodInputUseCase,
 ) : PeriodComponent, ComponentContext by componentContext {
 
@@ -92,13 +89,12 @@ internal class DefaultPeriodComponent @AssistedInject constructor(
         onChange(text.value)
     }
 
-    @AssistedFactory
-    interface Factory : PeriodComponent.Factory {
+    class Factory(private val convertPeriodInputUseCase: ConvertPeriodInputUseCase) : PeriodComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             period: Int,
             periodType: PeriodType
-        ): DefaultPeriodComponent
+        ): PeriodComponent = DefaultPeriodComponent(componentContext, period, periodType, convertPeriodInputUseCase)
     }
 }
 

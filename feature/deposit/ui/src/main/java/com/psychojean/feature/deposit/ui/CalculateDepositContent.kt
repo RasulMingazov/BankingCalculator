@@ -1,7 +1,6 @@
 package com.psychojean.feature.deposit.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,15 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -29,18 +26,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -65,57 +56,54 @@ fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modi
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopBar()
-        }
+        topBar = { TopBar() }
     ) { padding ->
-        val lazyListState = rememberLazyListState()
-        val visibilityOffset by remember {
-            derivedStateOf {
-                when {
-                    lazyListState.layoutInfo.visibleItemsInfo.isNotEmpty() && lazyListState.firstVisibleItemIndex == 0 -> {
-                        val topSize = lazyListState.layoutInfo.visibleItemsInfo[0].size
-                        val scrollOffset = lazyListState.firstVisibleItemScrollOffset
-                        scrollOffset / topSize.toFloat()
-                    }
-
-                    else -> 1f
-                }
-            }
-        }
-        lazyListState.EnableDragScroll()
-
         val columnChildModifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
 
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize(),
-            state = lazyListState
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
         ) {
-            item {
-                CalculateDepositInputFields(
-                    modifier = Modifier.graphicsLayer { alpha = 1f - visibilityOffset },
-                    amountComponent = component.amountComponent,
-                    interestRateComponent = component.interestRateComponent,
-                    periodComponent = component.periodComponent,
-                    periodTypeComponent = component.periodTypeComponent,
-                    currencyTypeComponent = component.currencyTypeComponent,
-                    itemsModifier = columnChildModifier,
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                CalculateDepositResult(
-                    modifier = columnChildModifier.fillParentMaxSize(),
-                    itemsModifier = columnChildModifier,
-                    state = state
-                )
-            }
+            CalculateDepositTitle(itemsModifier = columnChildModifier)
+            Spacer(modifier = Modifier.height(16.dp))
+            CalculateDepositResult(
+                itemsModifier = columnChildModifier,
+                state = state
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            CalculateDepositInputFields(
+                amountComponent = component.amountComponent,
+                interestRateComponent = component.interestRateComponent,
+                periodComponent = component.periodComponent,
+                periodTypeComponent = component.periodTypeComponent,
+                currencyTypeComponent = component.currencyTypeComponent,
+                itemsModifier = columnChildModifier,
+            )
         }
+    }
+}
 
+@Composable
+fun CalculateDepositTitle(
+    modifier: Modifier = Modifier,
+    itemsModifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            modifier = itemsModifier,
+            text = stringResource(id = R.string.deposit_profitability_calculator),
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            modifier = itemsModifier,
+            text = stringResource(id = R.string.calculate_deposit_description),
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
 
@@ -129,14 +117,6 @@ fun CalculateDepositResult(
     Box(modifier = modifier) {
         Card(modifier = itemsModifier) {
             Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                modifier = itemsModifier,
-                text = stringResource(id = R.string.calculation_results),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            HorizontalDivider(modifier = itemsModifier)
-            Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = itemsModifier) {
                 Box(
                     modifier = Modifier
@@ -212,18 +192,6 @@ private fun CalculateDepositInputFields(
 ) {
 
     Column(modifier = modifier) {
-        Text(
-            modifier = itemsModifier,
-            text = stringResource(id = R.string.deposit_profitability_calculator),
-            style = MaterialTheme.typography.headlineSmall
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            modifier = itemsModifier,
-            text = stringResource(id = R.string.calculate_deposit_description),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = itemsModifier) {
             AmountField(
                 modifier = Modifier.weight(2f),
@@ -265,36 +233,4 @@ fun TopBar(modifier: Modifier = Modifier) {
             }
         }, title = {}
     )
-}
-
-@Composable
-fun LazyListState.isScrollingUp(): Boolean {
-    var previousIndex by remember(this) { mutableIntStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember(this) { mutableIntStateOf(firstVisibleItemScrollOffset) }
-    return remember(this) {
-        derivedStateOf {
-            if (previousIndex != firstVisibleItemIndex) {
-                previousIndex > firstVisibleItemIndex
-            } else {
-                previousScrollOffset >= firstVisibleItemScrollOffset
-            }.also {
-                previousIndex = firstVisibleItemIndex
-                previousScrollOffset = firstVisibleItemScrollOffset
-            }
-        }
-    }.value
-}
-
-@Composable
-fun LazyListState.EnableDragScroll() {
-    val isDragged by interactionSource.collectIsDraggedAsState()
-    val isScrollingUp = isScrollingUp()
-    LaunchedEffect(isDragged) {
-        if (isDragged) return@LaunchedEffect
-        if (firstVisibleItemIndex != 0) return@LaunchedEffect
-        if (firstVisibleItemScrollOffset > layoutInfo.visibleItemsInfo[0].offset / 2 && !isScrollingUp)
-            animateScrollToItem(1)
-        else if (isScrollingUp)
-            animateScrollToItem(0)
-    }
 }

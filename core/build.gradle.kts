@@ -14,5 +14,7 @@ dependencies {
     implementation(libs.kotlin.serialization)
     implementation(libs.kotlin.immutable.list)
     implementation(libs.decompose)
+    implementation(libs.mvikotlin)
+    implementation(libs.mvikotlin.main)
     implementation(libs.javax.inject)
 }

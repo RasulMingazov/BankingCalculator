@@ -14,9 +14,6 @@ import com.psychojean.field.api.currency_type.CurrencyTypeComponent
 import com.psychojean.field.api.interest_rate.InterestRateComponent
 import com.psychojean.field.api.period.PeriodComponent
 import com.psychojean.field.api.period_type.PeriodTypeComponent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,8 +23,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
-internal class DefaultCalculateDepositComponent @AssistedInject constructor(
-    @Assisted componentContext: ComponentContext,
+internal class DefaultCalculateDepositComponent(
+    componentContext: ComponentContext,
     private val calculateDepositStore: CalculateDepositStore,
     interestRateFactory: InterestRateComponent.Factory,
     amountFactory: AmountComponent.Factory,
@@ -119,9 +116,25 @@ internal class DefaultCalculateDepositComponent @AssistedInject constructor(
         store.accept(intent)
     }
 
-    @AssistedFactory
-    interface Factory : CalculateDepositComponent.Factory {
-        override fun invoke(componentContext: ComponentContext): DefaultCalculateDepositComponent
+    class Factory(
+        private val calculateDepositStore: CalculateDepositStore,
+        private val interestRateFactory: InterestRateComponent.Factory,
+        private val amountFactory: AmountComponent.Factory,
+        private val currencyTypeFactory: CurrencyTypeComponent.Factory,
+        private val periodFactory: PeriodComponent.Factory,
+        private val periodTypeFactory: PeriodTypeComponent.Factory,
+    ) : CalculateDepositComponent.Factory {
+
+        override fun invoke(componentContext: ComponentContext): DefaultCalculateDepositComponent =
+            DefaultCalculateDepositComponent(
+                componentContext,
+                calculateDepositStore,
+                interestRateFactory,
+                amountFactory,
+                currencyTypeFactory,
+                periodFactory,
+                periodTypeFactory
+            )
     }
 
 }

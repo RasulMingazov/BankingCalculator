@@ -4,9 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.CurrencyType
 import com.psychojean.field.api.currency_type.CurrencyTypeComponent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -19,10 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 
-internal class DefaultCurrencyTypeComponent @AssistedInject constructor(
-    @Assisted componentContext: ComponentContext,
-    @Assisted currencyType: CurrencyType,
-    @Assisted currencyTypes: List<CurrencyType>,
+internal class DefaultCurrencyTypeComponent(
+    componentContext: ComponentContext,
+    currencyType: CurrencyType,
+    currencyTypes: List<CurrencyType>,
 ) : CurrencyTypeComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -60,13 +57,12 @@ internal class DefaultCurrencyTypeComponent @AssistedInject constructor(
         _value.update { type }
     }
 
-    @AssistedFactory
-    interface Factory : CurrencyTypeComponent.Factory {
+    class Factory: CurrencyTypeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             currencyType: CurrencyType,
             currencyTypes: List<CurrencyType>
-        ): DefaultCurrencyTypeComponent
+        ): CurrencyTypeComponent = DefaultCurrencyTypeComponent(componentContext, currencyType, currencyTypes)
     }
 }
 

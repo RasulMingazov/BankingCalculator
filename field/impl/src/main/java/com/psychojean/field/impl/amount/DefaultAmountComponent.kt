@@ -9,9 +9,6 @@ import com.psychojean.field.api.amount.ConvertAmountInputUseCase
 import com.psychojean.field.api.amount.InvalidAmountException
 import com.psychojean.field.api.amount.InvalidAmountType
 import com.psychojean.field.impl.R
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -24,10 +21,10 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
 
-internal class DefaultAmountComponent @AssistedInject constructor(
+internal class DefaultAmountComponent(
     private val convertAmountInputUseCase: ConvertAmountInputUseCase,
-    @Assisted componentContext: ComponentContext,
-    @Assisted amount: BigInteger
+    componentContext: ComponentContext,
+    amount: BigInteger
 ) : AmountComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -78,12 +75,13 @@ internal class DefaultAmountComponent @AssistedInject constructor(
         }
     }
 
-    @AssistedFactory
-    interface Factory : AmountComponent.Factory {
+    class Factory(private val convertAmountInputUseCase: ConvertAmountInputUseCase) :
+        AmountComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             amount: BigInteger
-        ): DefaultAmountComponent
+        ): AmountComponent =
+            DefaultAmountComponent(convertAmountInputUseCase, componentContext, amount)
     }
 }
 

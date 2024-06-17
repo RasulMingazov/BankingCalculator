@@ -4,9 +4,8 @@ import com.psychojean.core.PeriodType
 import com.psychojean.feature.deposit.api.domain.CalculateDepositUseCase
 import com.psychojean.feature.deposit.api.domain.DepositInput
 import com.psychojean.feature.deposit.api.domain.DepositOutput
-import javax.inject.Inject
 
-internal class DefaultCalculateDepositUseCase @Inject constructor() : CalculateDepositUseCase {
+internal class DefaultCalculateDepositUseCase : CalculateDepositUseCase {
 
     override suspend fun invoke(depositInput: DepositInput): Result<DepositOutput> = runCatching {
         val interestRate = depositInput.interestRate / 100

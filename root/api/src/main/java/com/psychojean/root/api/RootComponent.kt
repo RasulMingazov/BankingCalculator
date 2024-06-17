@@ -16,5 +16,4 @@ interface RootComponent {
     fun interface Factory {
         operator fun invoke(componentContext: ComponentContext): RootComponent
     }
-
 }

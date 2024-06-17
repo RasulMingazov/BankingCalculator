@@ -4,9 +4,8 @@ import com.psychojean.field.api.period.validation.year.InvalidYearPeriodExceptio
 import com.psychojean.field.api.period.validation.year.InvalidYearType
 import com.psychojean.field.api.period.validation.year.ConvertYearPeriodInputUseCase
 import java.math.BigInteger
-import javax.inject.Inject
 
-internal class DefaultConvertYearPeriodInputUseCase @Inject constructor(
+internal class DefaultConvertYearPeriodInputUseCase(
 ) : ConvertYearPeriodInputUseCase {
 
     override suspend operator fun invoke(year: String): Result<Int> = runCatching {

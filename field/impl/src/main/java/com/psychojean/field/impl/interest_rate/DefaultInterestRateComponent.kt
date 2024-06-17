@@ -8,9 +8,6 @@ import com.psychojean.field.api.interest_rate.ConvertInterestInputUseCase
 import com.psychojean.field.api.interest_rate.InvalidInterestRateException
 import com.psychojean.field.api.interest_rate.InvalidInterestRateType
 import com.psychojean.field.impl.R
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -22,9 +19,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-internal class DefaultInterestRateComponent @AssistedInject constructor(
-    @Assisted componentContext: ComponentContext,
-    @Assisted rate: Double,
+internal class DefaultInterestRateComponent(
+    componentContext: ComponentContext,
+    rate: Double,
     private val convertInterestInputUseCase: ConvertInterestInputUseCase,
 ) : InterestRateComponent, ComponentContext by componentContext {
 
@@ -77,12 +74,13 @@ internal class DefaultInterestRateComponent @AssistedInject constructor(
         }
     }
 
-    @AssistedFactory
-    interface Factory : InterestRateComponent.Factory {
+    class Factory(private val convertInterestInputUseCase: ConvertInterestInputUseCase) :
+        InterestRateComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             rate: Double
-        ): DefaultInterestRateComponent
+        ): InterestRateComponent =
+            DefaultInterestRateComponent(componentContext, rate, convertInterestInputUseCase)
     }
 }
 

@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.jetbrainsKotlinSerialization)
-    kotlin("kapt")
 }
 
 android {
@@ -50,9 +49,6 @@ dependencies {
     implementation(libs.mvikotlin)
     implementation(libs.mvikotlin.coroutines)
     implementation(libs.mvikotlin.main)
-
-    kapt(libs.dagger.compiler)
-    implementation(libs.dagger)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)

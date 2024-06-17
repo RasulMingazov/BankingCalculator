@@ -7,15 +7,12 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 import com.psychojean.root.api.RootComponent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.serialization.Serializable
 
-class DefaultRootComponent @AssistedInject constructor(
-    @Assisted componentContext: ComponentContext,
+internal class DefaultRootComponent(
+    componentContext: ComponentContext,
     private val calculateDepositFactory: CalculateDepositComponent.Factory
-    ) : RootComponent, ComponentContext by componentContext {
+) : RootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Config>()
 
@@ -48,8 +45,15 @@ class DefaultRootComponent @AssistedInject constructor(
         data object Deposit : Config()
     }
 
-    @AssistedFactory
-    interface Factory : RootComponent.Factory {
-        override fun invoke(componentContext: ComponentContext): DefaultRootComponent
+    class Factory(
+        private val calculateDepositComponentFactory: CalculateDepositComponent.Factory
+    ) : RootComponent.Factory {
+        override fun invoke(
+            componentContext: ComponentContext,
+        ): RootComponent =
+            DefaultRootComponent(
+                componentContext = componentContext,
+                calculateDepositFactory = calculateDepositComponentFactory
+            )
     }
 }

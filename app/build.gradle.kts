@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    kotlin("kapt")
 }
 
 android {
@@ -76,9 +75,9 @@ dependencies {
     implementation(libs.decompose)
     implementation(libs.decompose.extensions)
     implementation(libs.androidx.ui.text.google.fonts)
-
-    kapt(libs.dagger.compiler)
-    implementation(libs.dagger)
+    implementation(libs.mvikotlin.main)
+    implementation(libs.mvikotlin.coroutines)
+    implementation(libs.mvikotlin)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -44,7 +44,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositUiState
 import com.psychojean.field.api.amount.AmountComponent
@@ -61,7 +61,7 @@ import com.psychojean.field.ui.PeriodTypeField
 @Composable
 fun CalculateDepositContent(component: CalculateDepositComponent, modifier: Modifier = Modifier) {
 
-    val state by component.state.collectAsStateWithLifecycle(CalculateDepositUiState())
+    val state by component.state.subscribeAsState()
 
     Scaffold(
         modifier = modifier,

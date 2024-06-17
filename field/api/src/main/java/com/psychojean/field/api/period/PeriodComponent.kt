@@ -2,17 +2,18 @@ package com.psychojean.field.api.period
 
 import androidx.compose.runtime.Immutable
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.Value
+import com.psychojean.field.api.ErrorTextRes
 import com.psychojean.core.PeriodType
-import kotlinx.coroutines.flow.StateFlow
 
 @Immutable
 interface PeriodComponent {
 
-    val text: StateFlow<String>
+    val text: Value<String>
 
-    val error: StateFlow<Int?>
+    val error: Value<ErrorTextRes>
 
-    val value: StateFlow<Int>
+    val value: Value<Int>
 
     fun onChange(value: String)
 

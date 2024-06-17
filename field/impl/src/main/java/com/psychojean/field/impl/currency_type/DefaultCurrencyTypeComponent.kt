@@ -1,6 +1,9 @@
 package com.psychojean.field.impl.currency_type
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.CurrencyType
 import com.psychojean.field.api.currency_type.CurrencyTypeComponent
@@ -10,10 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 
 internal class DefaultCurrencyTypeComponent(
@@ -32,11 +31,11 @@ internal class DefaultCurrencyTypeComponent(
         types = currencyTypes,
     )
 
-    override val types: StateFlow<ImmutableList<CurrencyType>> =
-        MutableStateFlow(defaultSaved.types.toImmutableList())
+    override val types: Value<ImmutableList<CurrencyType>> =
+        MutableValue(defaultSaved.types.toImmutableList())
 
-    private val _value = MutableStateFlow(defaultSaved.value)
-    override val value: StateFlow<CurrencyType> = _value.asStateFlow()
+    private val _value = MutableValue(defaultSaved.value)
+    override val value: Value<CurrencyType> = _value
 
     init {
         lifecycle.doOnDestroy(scope::cancel)
@@ -57,12 +56,16 @@ internal class DefaultCurrencyTypeComponent(
         _value.update { type }
     }
 
-    class Factory: CurrencyTypeComponent.Factory {
+    class Factory : CurrencyTypeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             currencyType: CurrencyType,
             currencyTypes: List<CurrencyType>
-        ): CurrencyTypeComponent = DefaultCurrencyTypeComponent(componentContext, currencyType, currencyTypes)
+        ): CurrencyTypeComponent = DefaultCurrencyTypeComponent(
+            componentContext = componentContext,
+            currencyType = currencyType,
+            currencyTypes = currencyTypes
+        )
     }
 }
 

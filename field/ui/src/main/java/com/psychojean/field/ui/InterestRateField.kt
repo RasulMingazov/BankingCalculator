@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.psychojean.field.api.interest_rate.InterestRateComponent
 
 @Composable
@@ -19,16 +19,16 @@ fun InterestRateField(
     component: InterestRateComponent,
     modifier: Modifier = Modifier
 ) {
-    val text by component.text.collectAsStateWithLifecycle()
-    val error by component.error.collectAsStateWithLifecycle()
+    val text by component.text.subscribeAsState()
+    val error by component.error.subscribeAsState()
 
     OutlinedTextField(
         value = text,
         onValueChange = component::onChange,
         modifier = modifier,
-        isError = error != null,
+        isError = error.res != null,
         supportingText = {
-            error?.let {
+            error.res?.let {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = it),

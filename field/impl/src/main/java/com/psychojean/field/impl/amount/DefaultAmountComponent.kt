@@ -2,7 +2,11 @@ package com.psychojean.field.impl.amount
 
 import androidx.annotation.StringRes
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.doOnDestroy
+import com.psychojean.field.api.ErrorTextRes
 import com.psychojean.core.SerializableBigInteger
 import com.psychojean.field.api.amount.AmountComponent
 import com.psychojean.field.api.amount.ConvertAmountInputUseCase
@@ -13,18 +17,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
 
 internal class DefaultAmountComponent(
-    private val convertAmountInputUseCase: ConvertAmountInputUseCase,
     componentContext: ComponentContext,
-    amount: BigInteger
+    amount: BigInteger,
+    private val convertAmountInputUseCase: ConvertAmountInputUseCase
 ) : AmountComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -38,14 +38,14 @@ internal class DefaultAmountComponent(
         error = null
     )
 
-    private val _text = MutableStateFlow(defaultSaved.text)
-    override val text: StateFlow<String> = _text.asStateFlow()
+    private val _text = MutableValue(defaultSaved.text)
+    override val text: Value<String> = _text
 
-    private val _error = MutableStateFlow(defaultSaved.error)
-    override val error: StateFlow<Int?> = _error.asStateFlow()
+    private val _error = MutableValue(ErrorTextRes(defaultSaved.error))
+    override val error: Value<ErrorTextRes> = _error
 
-    private val _value = MutableStateFlow(defaultSaved.value)
-    override val value: StateFlow<BigInteger> = _value.asStateFlow()
+    private val _value = MutableValue(defaultSaved.value)
+    override val value: Value<BigInteger> = _value
 
     init {
         lifecycle.doOnDestroy(scope::cancel)
@@ -57,7 +57,7 @@ internal class DefaultAmountComponent(
                 AmountSerializable(
                     value = value.value,
                     text = text.value,
-                    error = error.value
+                    error = error.value.res
                 )
             }
         )
@@ -67,10 +67,12 @@ internal class DefaultAmountComponent(
         scope.launch {
             _text.update { value.filter { it.isDigit() }.take(10) }
             convertAmountInputUseCase(_text.value).onSuccess { rate ->
-                _error.update { null }
+                _error.update { state -> state.copy(null) }
                 _value.update { rate }
             }.onFailure { exception ->
-                if (exception is InvalidAmountException) _error.update { exception.type.text }
+                if (exception is InvalidAmountException) _error.update { state ->
+                    state.copy(exception.type.text)
+                }
             }
         }
     }
@@ -81,7 +83,11 @@ internal class DefaultAmountComponent(
             componentContext: ComponentContext,
             amount: BigInteger
         ): AmountComponent =
-            DefaultAmountComponent(convertAmountInputUseCase, componentContext, amount)
+            DefaultAmountComponent(
+                componentContext = componentContext,
+                amount = amount,
+                convertAmountInputUseCase = convertAmountInputUseCase,
+            )
     }
 }
 

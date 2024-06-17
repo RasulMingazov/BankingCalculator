@@ -2,15 +2,17 @@ package com.psychojean.feature.deposit.impl.presentation.calculate
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.operator.map
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.psychojean.core.CurrencyType
 import com.psychojean.core.PeriodType
 import com.psychojean.core.asThousand
+import com.psychojean.core.asValue
 import com.psychojean.feature.deposit.api.domain.CalculateDepositStore
 import com.psychojean.feature.deposit.api.domain.CalculateDepositUseCase
 import com.psychojean.feature.deposit.api.presentation.CalculateDepositComponent
@@ -26,21 +28,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.math.RoundingMode
 
 internal class DefaultCalculateDepositComponent(
     componentContext: ComponentContext,
-    private val storeFactory: StoreFactory,
-    private val calculateDepositUseCase: CalculateDepositUseCase,
     interestRateFactory: InterestRateComponent.Factory,
     amountFactory: AmountComponent.Factory,
     currencyTypeFactory: CurrencyTypeComponent.Factory,
     periodFactory: PeriodComponent.Factory,
     periodTypeFactory: PeriodTypeComponent.Factory,
+    private val storeFactory: StoreFactory,
+    private val calculateDepositUseCase: CalculateDepositUseCase,
 ) : CalculateDepositComponent, ComponentContext by componentContext {
 
     private val store =
@@ -97,27 +97,27 @@ internal class DefaultCalculateDepositComponent(
 
     init {
         scope.launch {
-            interestRateComponent.value.collect { rate ->
+            interestRateComponent.value.subscribe { rate ->
                 accept(CalculateDepositStore.Intent.RateChanged(rate))
             }
         }
         scope.launch {
-            amountComponent.value.collect { amount ->
+            amountComponent.value.subscribe { amount ->
                 accept(CalculateDepositStore.Intent.InitialDepositChanged(amount))
             }
         }
         scope.launch {
-            currencyTypeComponent.value.collect { currencyType ->
+            currencyTypeComponent.value.subscribe { currencyType ->
                 accept(CalculateDepositStore.Intent.CurrencyTypeChanged(currencyType))
             }
         }
         scope.launch {
-            periodComponent.value.collect { period ->
+            periodComponent.value.subscribe { period ->
                 accept(CalculateDepositStore.Intent.PeriodChanged(period))
             }
         }
         scope.launch {
-            periodTypeComponent.value.collect { periodType ->
+            periodTypeComponent.value.subscribe { periodType ->
                 periodComponent.onPeriodTypeSelected(periodType)
                 accept(CalculateDepositStore.Intent.PeriodTypeChanged(periodType))
             }
@@ -126,7 +126,7 @@ internal class DefaultCalculateDepositComponent(
         lifecycle.doOnDestroy { scope.cancel() }
     }
 
-    override val state: Flow<CalculateDepositUiState> = store.states.map {
+    override val state: Value<CalculateDepositUiState> = store.asValue().map {
         CalculateDepositUiState(
             incomeRatio = it.incomeRatio,
             depositAmount = "${
@@ -167,5 +167,4 @@ internal class DefaultCalculateDepositComponent(
                 periodTypeFactory = periodTypeFactory
             )
     }
-
 }

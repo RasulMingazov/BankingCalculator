@@ -1,6 +1,9 @@
 package com.psychojean.field.impl.period_type
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.psychojean.core.PeriodType
 import com.psychojean.field.api.period_type.PeriodTypeComponent
@@ -10,10 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 
 internal class DefaultPeriodTypeComponent(
@@ -32,11 +31,11 @@ internal class DefaultPeriodTypeComponent(
         types = periodTypes
     )
 
-    override val types: StateFlow<ImmutableList<PeriodType>> =
-        MutableStateFlow(defaultSaved.types.toImmutableList())
+    override val types: Value<ImmutableList<PeriodType>> =
+        MutableValue(defaultSaved.types.toImmutableList())
 
-    private val _value = MutableStateFlow(defaultSaved.value)
-    override val value: StateFlow<PeriodType> = _value.asStateFlow()
+    private val _value = MutableValue(defaultSaved.value)
+    override val value: Value<PeriodType> = _value
 
     init {
         lifecycle.doOnDestroy(scope::cancel)
@@ -62,7 +61,11 @@ internal class DefaultPeriodTypeComponent(
             componentContext: ComponentContext,
             periodType: PeriodType,
             periodTypes: List<PeriodType>
-        ): PeriodTypeComponent = DefaultPeriodTypeComponent(componentContext, periodType, periodTypes)
+        ): PeriodTypeComponent = DefaultPeriodTypeComponent(
+            componentContext = componentContext,
+            periodType = periodType,
+            periodTypes = periodTypes
+        )
     }
 }
 

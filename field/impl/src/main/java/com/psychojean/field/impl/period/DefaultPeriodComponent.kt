@@ -2,7 +2,11 @@ package com.psychojean.field.impl.period
 
 import androidx.annotation.StringRes
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.doOnDestroy
+import com.psychojean.field.api.ErrorTextRes
 import com.psychojean.core.PeriodType
 import com.psychojean.field.api.period.PeriodComponent
 import com.psychojean.field.api.period.validation.ConvertPeriodInputUseCase
@@ -15,10 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -44,14 +44,14 @@ internal class DefaultPeriodComponent(
     @Volatile
     private var periodType: PeriodType = defaultSaved.type
 
-    private val _text = MutableStateFlow(defaultSaved.text)
-    override val text: StateFlow<String> = _text.asStateFlow()
+    private val _text = MutableValue(defaultSaved.text)
+    override val text: Value<String> = _text
 
-    private val _error = MutableStateFlow(defaultSaved.error)
-    override val error: StateFlow<Int?> = _error.asStateFlow()
+    private val _error = MutableValue(ErrorTextRes(defaultSaved.error))
+    override val error: Value<ErrorTextRes> = _error
 
-    private val _value = MutableStateFlow(defaultSaved.value)
-    override val value: StateFlow<Int> = _value.asStateFlow()
+    private val _value = MutableValue(defaultSaved.value)
+    override val value: Value<Int> = _value
 
     init {
         lifecycle.doOnDestroy(scope::cancel)
@@ -64,7 +64,7 @@ internal class DefaultPeriodComponent(
                     value = value.value,
                     type = periodType,
                     text = text.value,
-                    error = error.value
+                    error = error.value.res
                 )
             }
         )
@@ -75,11 +75,11 @@ internal class DefaultPeriodComponent(
             _text.update { value.take(4) }
             convertPeriodInputUseCase(period = text.value, periodType = periodType)
                 .onSuccess { period ->
-                    _error.update { null }
+                    _error.update { state -> state.copy(null) }
                     _value.update { period }
                 }.onFailure { exception ->
-                    if (exception is InvalidYearPeriodException) _error.update { exception.type.text }
-                    if (exception is InvalidMonthPeriodException) _error.update { exception.type.text }
+                    if (exception is InvalidYearPeriodException) _error.update { state -> state.copy(exception.type.text) }
+                    if (exception is InvalidMonthPeriodException) _error.update { state -> state.copy(exception.type.text) }
                 }
         }
     }
@@ -94,7 +94,11 @@ internal class DefaultPeriodComponent(
             componentContext: ComponentContext,
             period: Int,
             periodType: PeriodType
-        ): PeriodComponent = DefaultPeriodComponent(componentContext, period, periodType, convertPeriodInputUseCase)
+        ): PeriodComponent = DefaultPeriodComponent(
+            componentContext = componentContext,
+            period = period,
+            periodType = periodType,
+            convertPeriodInputUseCase = convertPeriodInputUseCase)
     }
 }
 

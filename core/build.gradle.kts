@@ -16,5 +16,7 @@ dependencies {
     implementation(libs.decompose)
     implementation(libs.mvikotlin)
     implementation(libs.mvikotlin.main)
+    implementation(libs.mvikotlin.coroutines)
+    implementation(libs.mvikotlin.rx)
     implementation(libs.javax.inject)
 }

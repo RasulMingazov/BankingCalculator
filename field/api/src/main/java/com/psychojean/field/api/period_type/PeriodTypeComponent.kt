@@ -2,16 +2,16 @@ package com.psychojean.field.api.period_type
 
 import androidx.compose.runtime.Immutable
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.Value
 import com.psychojean.core.PeriodType
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.flow.StateFlow
 
 @Immutable
 interface PeriodTypeComponent {
 
-    val types: StateFlow<ImmutableList<PeriodType>>
+    val types: Value<ImmutableList<PeriodType>>
 
-    val value: StateFlow<PeriodType>
+    val value: Value<PeriodType>
 
     fun onSelect(type: PeriodType)
 

@@ -2,9 +2,13 @@ package com.psychojean.field.impl.interest_rate
 
 import androidx.annotation.StringRes
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.doOnDestroy
-import com.psychojean.field.api.interest_rate.InterestRateComponent
+import com.psychojean.field.api.ErrorTextRes
 import com.psychojean.field.api.interest_rate.ConvertInterestInputUseCase
+import com.psychojean.field.api.interest_rate.InterestRateComponent
 import com.psychojean.field.api.interest_rate.InvalidInterestRateException
 import com.psychojean.field.api.interest_rate.InvalidInterestRateType
 import com.psychojean.field.impl.R
@@ -12,10 +16,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -36,14 +36,14 @@ internal class DefaultInterestRateComponent(
         error = null
     )
 
-    private val _text = MutableStateFlow(defaultSaved.text)
-    override val text: StateFlow<String> = _text.asStateFlow()
+    private val _text = MutableValue(defaultSaved.text)
+    override val text: Value<String> = _text
 
-    private val _error = MutableStateFlow(defaultSaved.error)
-    override val error: StateFlow<Int?> = _error.asStateFlow()
+    private val _error = MutableValue(ErrorTextRes(defaultSaved.error))
+    override val error: Value<ErrorTextRes> = _error
 
-    private val _value = MutableStateFlow(defaultSaved.value)
-    override val value: StateFlow<Double> = _value.asStateFlow()
+    private val _value = MutableValue(defaultSaved.value)
+    override val value: Value<Double> = _value
 
     init {
         lifecycle.doOnDestroy(scope::cancel)
@@ -55,7 +55,7 @@ internal class DefaultInterestRateComponent(
                 InterestRateSerializable(
                     value = value.value,
                     text = text.value,
-                    error = error.value
+                    error = error.value.res
                 )
             }
         )
@@ -66,10 +66,12 @@ internal class DefaultInterestRateComponent(
             val preprocessInterestRate = value.take(4)
             _text.update { preprocessInterestRate }
             convertInterestInputUseCase(preprocessInterestRate).onSuccess { rate ->
-                _error.update { null }
+                _error.update { state -> state.copy(null) }
                 _value.update { rate }
             }.onFailure { exception ->
-                if (exception is InvalidInterestRateException) _error.update { exception.type.text }
+                if (exception is InvalidInterestRateException) _error.update { state ->
+                    state.copy(exception.type.text)
+                }
             }
         }
     }
@@ -80,7 +82,11 @@ internal class DefaultInterestRateComponent(
             componentContext: ComponentContext,
             rate: Double
         ): InterestRateComponent =
-            DefaultInterestRateComponent(componentContext, rate, convertInterestInputUseCase)
+            DefaultInterestRateComponent(
+                componentContext = componentContext,
+                rate = rate,
+                convertInterestInputUseCase = convertInterestInputUseCase
+            )
     }
 }
 

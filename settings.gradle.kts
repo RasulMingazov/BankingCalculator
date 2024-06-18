@@ -20,7 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "BankingCalculator"
-include(":app")
+include(":androidApp")
 include(":root:api")
 include(":root:impl")
 include(":feature:deposit:api")

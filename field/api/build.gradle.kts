@@ -1,19 +1,46 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrainsKotlinJvm)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinMultiplatform)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+kotlin {
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+    }
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = ":field:api"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        androidMain.dependencies {
+            implementation(project(":core"))
+            implementation(libs.decompose)
+            implementation(libs.kotlin.coroutines)
+            implementation(libs.kotlin.immutable.list)
+        }
+    }
 }
 
-dependencies {
-    implementation(project(":core"))
-
-    implementation(libs.decompose)
-    implementation(libs.kotlin.coroutines)
-    implementation(libs.kotlin.immutable.list)
-
-    compileOnly(libs.compose.stable.marker)
+android {
+    namespace = "com.psychojean.field.api"
+    compileSdk = 34
+    defaultConfig {
+        minSdk = 26
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
